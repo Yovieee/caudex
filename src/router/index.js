@@ -10,9 +10,23 @@ const routes = [
     component: () => import('../views/HomeView.vue')
   },
   {
-    path: '/admin',
+    path: '/Admin',
     name: 'admin',
-    component: () => import('../components/Admin/AdminLayout.vue')
+    component: () => import('../components/Admin/AdminLayout.vue'),
+    children: [
+      {
+        path: '/Admin/Dashboard',
+        name: 'dashboard',
+        meta: { title: 'Dashboard' },
+        component: () => import('../components/Admin/AdminDashboardComponent.vue')
+      },
+      {
+        path: '/Admin/Users',
+        name: 'users',
+        meta: { title: 'Users' },
+        component: () => import('../components/Admin/UsersComponent/AdminUsersReadComponent.vue')
+      }
+    ]
   }
 ]
 
