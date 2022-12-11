@@ -408,7 +408,7 @@
         <v-row>
           <v-spacer class="hidden-sm-and-right" />
           <v-col md="42">
-            <div>
+            <div class="right">
               &copy; 2022, made with
               <v-icon size="20">
                 mdi-heart
