@@ -16,12 +16,9 @@
         <div class="row">
           <div class="col-12">
             <nav class="main-nav">
-              <!-- ***** Logo Start ***** -->
               <router-link to="../home" class="logo">
                 <h4>Cau<span>Dex</span></h4>
               </router-link>
-              <!-- ***** Logo End ***** -->
-              <!-- ***** Menu Start ***** -->
               <ul class="nav">
                 <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
                 <li class="scroll-to-section"><a href="#about">About Us</a></li>
@@ -34,13 +31,11 @@
               <a class='menu-trigger'>
                 <span>Menu</span>
               </a>
-              <!-- ***** Menu End ***** -->
             </nav>
           </div>
         </div>
       </div>
     </div>
-    <!-- ***** Header Area End ***** -->
 
     <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
       <div class="container">

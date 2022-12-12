@@ -31,17 +31,26 @@ const routes = [{
         ]
     },
     {
-        path: '/user',
-        name: 'user',
+        path: '/Customer',
+        name: 'Customer',
         component: () =>
-            import ('../components/User/Component.vue'),
+            import ('../components/Customer/Component.vue'),
         children: [{
-            path: '/Admin/HomePage',
-            name: 'HomePage',
-            meta: { title: 'HomePage' },
-            component: () =>
-                import ('../components/User/HomePage.vue')
-        }]
+                path: '/Customer/HomePage',
+                name: 'HomePage',
+                meta: { title: 'HomePage' },
+                component: () =>
+                    import ('../components/Customer/HomePage.vue'),
+            },
+            {
+
+                path: '/Customer/DetailProduct',
+                name: 'DetailProduck',
+                meta: { title: 'DetailProduct' },
+                component: () =>
+                    import ('../components/Customer/DetailProduct.vue'),
+            }
+        ]
 
     },
     {
