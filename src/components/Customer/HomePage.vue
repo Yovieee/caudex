@@ -30,7 +30,7 @@
                                 <v-card-title>kategori</v-card-title>
 
                                 <v-card-actions>
-                                    <router-link to="DetailProduck">
+                                    <router-link to="DetailProduct">
                                     <v-btn color="#00E676">
                                         Lanjut
                                     </v-btn>

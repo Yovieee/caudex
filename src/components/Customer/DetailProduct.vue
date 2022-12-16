@@ -17,7 +17,7 @@
                 </v-btn>
                 <v-btn color="primary" dark @click="reviewDialog = true">
                     Review
-                </v-btn>
+                </v-btn>    
                 <v-dialog v-model="reviewDialog" max-width="3000">
                     <v-card>
                         <v-card-title>
@@ -63,9 +63,9 @@
                     <v-divider></v-divider>
                     <v-card-text>
                         Judul
-                        <p>Tehun Terbit</p>
-                        <p>Kategori</p>
-                        <p>Autohor dan Publiser</p>
+                        <br>Tehun Terbit
+                        <br>Kategori
+                        <br>Autohor dan Publiser
                     </v-card-text>
                 </div>
             </v-expand-transition>
