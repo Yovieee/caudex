@@ -6,7 +6,7 @@
                <div class="col-12">
                   <nav class="main-nav">
                      <!-- ***** Logo Start ***** -->
-                     <router-link to="../home" class="logo">
+                     <router-link to="../" class="logo">
                         <h4>Cau<span>Dex</span></h4>
                      </router-link>
                      <!-- ***** Logo End ***** -->
