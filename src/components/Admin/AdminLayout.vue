@@ -3,10 +3,10 @@
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-img class="ml-auto" max-height="48" max-width="48" src="../../../public/img/icons/ms-icon-310x310.png"></v-img>
-      <v-toolbar-title>Caudex</v-toolbar-title>
+      <v-toolbar-title>CAUDEX</v-toolbar-title>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
-          <v-avatar color="grey darken-1 shrink" size="32" class="ml-auto" v-on="on"></v-avatar>
+          <v-avatar color="grey darken-1 shrink" size="32" class="ml-auto" v-on="on" style="cursor: pointer"></v-avatar>
         </template>
         <v-list>
           <p class="text-center mt-2 mb-4">Nama Pengguna</p>
@@ -51,7 +51,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'AdminLayout',
   data: () => ({
@@ -59,7 +58,7 @@ export default {
     navigationDrawerItems: [
       { icon: 'mdi-home', text: 'Dashboard', to: '/Admin/Dashboard'},
       { icon: 'mdi-account', text: 'Users', to: '/Admin/Users' },
-      { icon: 'mdi-book', text: 'Books', to: '/Admin/Books' },
+      { icon: 'mdi-book-open-variant', text: 'Books', to: '/Admin/Books' },
       { icon: 'mdi-cash', text: 'Subscriptions', to: '/Admin/Subscriptions' },
       { icon: 'mdi-chart-box', text: 'Analytics', to: '/Admin/Analytics' }
     ],
