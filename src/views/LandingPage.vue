@@ -1,5 +1,5 @@
 <template>
-  <v-navigation>
+  <v-container>
     <div id="js-preloader" class="js-preloader">
       <div class="preloader-inner">
         <span class="dot"></span>
@@ -23,7 +23,7 @@
                 <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
                 <li class="scroll-to-section"><a href="#about">About Us</a></li>
                 <li class="scroll-to-section"><a href="#blog">Blog</a></li>
-                <li class="scroll-to-section"><a href="#portfolio">OutTeam</a></li>
+                <li class="scroll-to-section"><a href="#portfolio">Our Team</a></li>
                 <v-btn class="main-red-button" rounded style="margin-right:10px;" color="#2196F3" dark
                   to="../login">Login</v-btn>
                 <v-btn class="main-red-button" rounded color="#F44336" dark mt="6" to="../register">Register</v-btn>
@@ -207,7 +207,7 @@
                   <div class="left-content align-self-center">
                     <span><i class="fa fa-calendar"></i> 24 Nov 2022</span>
                     <a href="https://www.perpusnas.go.id/berita/komisi-x-drp-ri-dorong-perpusnas-pertajam-unsur-literasi-masyarakat">
-                      <h4>Komisi X DRP RI   dorong Perpusnas</h4>
+                      <h4>Komisi X DRP RI Dorong Perpusnas</h4>
                     </a>
                     <p>Komisi X DRP RI Dorong Perpusnas Pertajam....</p>
                   </div>
@@ -261,33 +261,33 @@
         <div class="col-lg-3 col-sm-6">
           <!-- <a href="#"> -->
           <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.3s">
-            <div class="hidden-content">
+            <div class="hidden-content text-center">
               <h4>Blasius Yonas Vikariandi</h4>
-              <p>Data-data</p>
+              <p>Kalau bisa yang susah kenapa harus yang gampang?</p>
             </div>
             <div class="showed-content">
               <v-avatar size="100">
-                <img src="@/assets/team/team (3).jpg">
+                <img src="@/assets/team/team (3).jpg" style="object-fit: cover">
               </v-avatar>
             </div>
           </div>
           <v-row>
             <v-col cols="9" md="4">
               <v-card-actions>
-                <v-icon>mdi-github</v-icon>
-                <v-btn color="#F44336" text href="https://github.com/Yovieee">Github </v-btn>
+                <v-btn color="#F44336" text href="https://github.com/Yovieee">
+                <v-icon>mdi-github</v-icon></v-btn>
               </v-card-actions>
             </v-col>
             <v-col cols="10" md="4">
               <v-card-actions>
-                <v-icon>mdi-linkedin</v-icon>
-                <v-btn color="#F44336" text href="https://www.linkedin.com/in/byonas/">LinkedIn </v-btn>
+                <v-btn color="#F44336" text href="https://www.linkedin.com/in/byonas/">
+                <v-icon>mdi-linkedin</v-icon></v-btn>
               </v-card-actions>
             </v-col>
             <v-col cols="10" md="2">
               <v-card-actions>
-                <v-icon>mdi-instagram</v-icon>
-                <v-btn color="#F44336" text href="https://github.com/Yovieee">Ig </v-btn>
+                <v-btn color="#F44336" text href="https://instagram.com/blasius_yonas">
+                <v-icon>mdi-instagram</v-icon></v-btn>
               </v-card-actions>
             </v-col>
           </v-row>
@@ -296,31 +296,31 @@
           <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.4s">
             <div class="hidden-content">
               <h4>Otniel Sadar Herianto Sitohang</h4>
-              <p>a</p>
+              <p>Pekerjaan akan terasa mudah jika tidak dikerjakan.</p>
             </div>
             <div class="showed-content">
               <v-avatar size="100">
-                <img src="@/assets/team/team (2).jpg">
+                <img src="@/assets/team/team (2).jpg" style="object-fit: cover">
               </v-avatar>
             </div>
           </div>
           <v-row>
             <v-col cols="9" md="4">
               <v-card-actions>
-                <v-icon>mdi-github</v-icon>
-                <v-btn color="#F44336" text href="https://github.com/Yovieee">Github </v-btn>
+                <v-btn color="#F44336" text href="https://github.com/OtnielSitohang">
+                <v-icon>mdi-github</v-icon></v-btn>
               </v-card-actions>
             </v-col>
             <v-col cols="10" md="4">
               <v-card-actions>
-                <v-icon>mdi-linkedin</v-icon>
-                <v-btn color="#F44336" text href="https://www.linkedin.com/in/byonas/">LinkedIn </v-btn>
+                <v-btn color="#F44336" text href="https://www.linkedin.com/in/otniel-sadar-herianto-sitohang-a23996253/">
+                <v-icon>mdi-linkedin</v-icon></v-btn>
               </v-card-actions>
             </v-col>
             <v-col cols="9" md="3">
               <v-card-actions>
-                <v-icon>mdi-instagram</v-icon>
-                <v-btn color="#F44336" text href="https://github.com/Yovieee">Ig </v-btn>
+                <v-btn color="#F44336" text href="https://instagram.com/otnielshs_">
+                <v-icon>mdi-instagram</v-icon></v-btn>
               </v-card-actions>
             </v-col>
           </v-row>
@@ -330,31 +330,31 @@
           <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.5s">
             <div class="hidden-content">
               <h4>Rakai Anandhi Mahardhika</h4>
-              <p>a</p>
+              <p>Masih belum ada ide.</p>
             </div>
             <div class="showed-content">
               <v-avatar size="100">
-                <img src="@/assets/team/team (4).jpg">
+                <img src="@/assets/team/team (4).jpg" style="object-fit: cover">
               </v-avatar>
             </div>
           </div>
           <v-row>
             <v-col cols="9" md="4">
               <v-card-actions>
-                <v-icon>mdi-github</v-icon>
-                <v-btn color="#F44336" text href="https://github.com/Yovieee">Github </v-btn>
+                <v-btn color="#F44336" text href="https://github.com/dumbgoat7">
+                <v-icon>mdi-github</v-icon></v-btn>
               </v-card-actions>
             </v-col>
             <v-col cols="10" md="4">
               <v-card-actions>
-                <v-icon>mdi-linkedin</v-icon>
-                <v-btn color="#F44336" text href="https://www.linkedin.com/in/byonas/">LinkedIn </v-btn>
+                <v-btn color="#F44336" text href="" disabled>
+                <v-icon>mdi-linkedin</v-icon></v-btn>
               </v-card-actions>
             </v-col>
             <v-col cols="9" md="3">
               <v-card-actions>
-                <v-icon>mdi-instagram</v-icon>
-                <v-btn color="#F44336" text href="https://github.com/Yovieee">Ig </v-btn>
+                <v-btn color="#F44336" text href="https://instagram.com/rakaianandhi">
+                <v-icon>mdi-instagram</v-icon></v-btn>
               </v-card-actions>
             </v-col>
           </v-row>
@@ -363,31 +363,31 @@
           <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.6s">
             <div class="hidden-content">
               <h4>Stillman Flobert Butar-Butuar</h4>
-              <p>Lorem</p>
+              <p>Hidup itu mudah, maka persulitlah!</p>
             </div>
             <div class="showed-content">
               <v-avatar size="100">
-                <img src="@/assets/team/team (1).jpg">
+                <img src="@/assets/team/team (1).jpg" style="object-fit: cover">
               </v-avatar>
             </div>
           </div>
           <v-row>
             <v-col cols="9" md="4">
               <v-card-actions>
-                <v-icon>mdi-github</v-icon>
-                <v-btn color="#F44336" text href="https://github.com/Yovieee">Github </v-btn>
+                <v-btn color="#F44336" text href="https://github.com/stillmanflobert">
+                <v-icon>mdi-github</v-icon></v-btn>
               </v-card-actions>
             </v-col>
             <v-col cols="9" md="4">
               <v-card-actions>
-                <v-icon>mdi-linkedin</v-icon>
-                <v-btn color="#F44336" text href="https://github.com/Yovieee">LinkedIn </v-btn>
+                <v-btn color="#F44336" text href="" disabled>
+                <v-icon>mdi-linkedin</v-icon></v-btn>
               </v-card-actions>
             </v-col>
             <v-col cols="9" md="4">
               <v-card-actions>
-                <v-icon>mdi-instagram</v-icon>
-                <v-btn color="#F44336" text href="https://github.com/Yovieee">Instagram </v-btn>
+                <v-btn color="#F44336" text href="" disabled>
+                <v-icon>mdi-instagram</v-icon></v-btn>
               </v-card-actions>
             </v-col>
           </v-row>
@@ -415,10 +415,10 @@
       </v-container>
     </v-footer>
 
-  </v-navigation>
+  </v-container>
 </template>
 <script>
 export default {
-  name: 'HomeView'
+  name: 'LandingPage',
 }
 </script>

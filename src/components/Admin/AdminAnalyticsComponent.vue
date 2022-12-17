@@ -53,7 +53,7 @@ export default {
 					{
 						label: "Number of reads day by day",
 						data: numberOfReads, //y-axes data
-						borderColor: "pink",
+						borderColor: "yellow",
 						fill: false,
 					},
 				],

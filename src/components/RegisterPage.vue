@@ -1,138 +1,305 @@
 <template>
-   <v-navigation>
-      <v-card>
-         <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
-            <div class="container">
-               <div class="row">
-                  <div class="col-14">
-                     <nav class="main-nav">
-                        <router-link to="../" class="logo">
-                           <h4>Cau<span>Dex</span></h4>
-                        </router-link>
-                        <ul class="nav">
-                           <v-btn class="main-red-button" rounded style="margin-right:10px;" color="#2196F3" dark
-                              to="../login">Login</v-btn>
-                           <v-btn class="main-red-button" rounded color="#F44336" dark mt="6"
-                              to="../register">Register</v-btn>
-                        </ul>
-                        <a class='menu-trigger'>
-                           <span>Menu</span>
-                        </a>
-                     </nav>
-                  </div>
-               </div>
-            </div>
-         </header>
-         <v-container style="height: 15vh;"></v-container>
-      </v-card>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      <v-main>
-         <v-app id="inspire">
-            <span class="bg"></span>
-            <v-content>
-               <v-container fluid fill-height>
-                  <v-layout align-center justify-center>
-                     <v-flex xs12 sm8 md4>
-                        <v-card>
-                           <v-toolbar dark color="blue">
-                              <v-toolbar-title>Register</v-toolbar-title>
-                           </v-toolbar>
-                           <v-card-text>
-                              <v-form>
-                                 <!--Foto-->
-                                 <v-file-input v-model="formUser.user_photo" style="display: none" id="imageInput"
-                                    accept="image/*" @change="setPreviewImage"></v-file-input>
-                                 <div class="text-center">
-                                    <img src="../assets/account-circle.svg" @click="
-                                       document.querySelector('#imageInput').click()
-                                    " id="imagePreview" style="
-                                             border-radius: 50%;
-                                             cursor: pointer;
-                                             max-width: 135px;
-                                             max-height: 135px;
-                                             min-width: 175px;
-                                             min-height: 175px;
-                                             object-fit: cover;
-                                          " />
-                                 </div>
-                                 <!--Name-->
-                                 <v-text-field prepend-icon="mdi-account" name="Nama" label="Name" type="text"
-                                    v-model="formUser.name"></v-text-field>
+	<v-app>
+		<v-card>
+			<header
+				class="header-area header-sticky wow slideInDown"
+				data-wow-duration="0.75s"
+				data-wow-delay="0s"
+			>
+				<div class="container">
+					<div class="row">
+						<div class="col-14">
+							<nav class="main-nav">
+								<router-link to="../" class="logo">
+									<v-row>
+										<v-col>
+											<v-img
+												class="mt-6"
+												src="../../public/img/icons/ms-icon-310x310.png"
+												max-width="50"
+												max-height="50"
+											>
+											</v-img>
+										</v-col>
+										<v-col>
+											<h4>
+												<span class="blue--text"
+													>CAU</span
+												><span class="red--text"
+													>DEX</span
+												>
+											</h4>
+										</v-col>
+									</v-row>
+								</router-link>
+								<ul class="nav">
+									<v-btn
+										class="main-red-button mr-4"
+										rounded
+										color="blue"
+										dark
+										href="#/login"
+										>Login</v-btn
+									>
+									<v-btn
+										class="main-red-button"
+										rounded
+										color="red"
+										dark
+										href="#/register"
+										>Register</v-btn
+									>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</header>
+		</v-card>
+		<v-spacer></v-spacer>
+		<v-spacer></v-spacer>
+		<v-main>
+			<div>
+				<span class="bg"></span>
+				<div>
+					<v-container fluid fill-height>
+						<v-layout align-center justify-center>
+							<v-flex xs12 sm8 md4>
+								<v-card>
+									<v-toolbar dark color="red">
+										<v-toolbar-title
+											>Register</v-toolbar-title
+										>
+									</v-toolbar>
+									<v-card-text>
+										<v-form>
+											<v-layout>
+												<v-row>
+													<v-col>
+														<!--Foto-->
+														<v-file-input
+															v-model="
+																formUser.user_photo
+															"
+															style="
+																display: none;
+															"
+															id="imageInput"
+															accept="image/*"
+															@change="
+																setPreviewImage
+															"
+														></v-file-input>
+														<v-container
+															fill-height
+														>
+															<img
+																src="../assets/account-circle.svg"
+																@click="
+																	document
+																		.querySelector(
+																			'#imageInput'
+																		)
+																		.click()
+																"
+																id="imagePreview"
+																style="
+																	border-radius: 50%;
+																	cursor: pointer;
+																	max-width: 200px;
+																	max-height: 200px;
+																	min-width: 200px;
+																	min-height: 200px;
+																	object-fit: cover;
+																"
+															/>
+														</v-container>
+													</v-col>
+													<v-col>
+														<!--Name-->
+														<v-text-field
+															prepend-icon="mdi-account"
+															name="Nama"
+															label="Name"
+															type="text"
+															v-model="
+																formUser.name
+															"
+														></v-text-field>
 
-                                 <!--Tanggal Lahir-->
-                                 <v-text-field prepend-icon="mdi-calendar" name="date" label="date" type="date"
-                                    v-model="formUser.user_birthdate"></v-text-field>
+														<!--Tanggal Lahir-->
+														<v-menu
+															v-model="
+																birthdatePicker
+															"
+															:close-on-content-click="
+																false
+															"
+															:nudge-right="40"
+															transition="scale-transition"
+															offset-y
+															min-width="auto"
+														>
+															<template
+																v-slot:activator="{
+																	on,
+																	attrs,
+																}"
+															>
+																<v-text-field
+																	v-model="
+																		formUser.user_birthdate
+																	"
+																	label="Birthdate"
+																	prepend-icon="mdi-calendar"
+																	readonly
+																	v-bind="
+																		attrs
+																	"
+																	v-on="on"
+																></v-text-field>
+															</template>
+															<v-date-picker
+																v-model="
+																	formUser.user_birthdate
+																"
+																@input="
+																	birthdatePicker = false
+																"
+															></v-date-picker>
+														</v-menu>
 
-                                 <!--Email-->
-                                 <v-text-field prepend-icon="mdi-account" name="email" label="Email" type="text"
-                                    v-model="formUser.user_email"></v-text-field>
+														<!--Email-->
+														<v-text-field
+															prepend-icon="mdi-account"
+															name="email"
+															label="Email"
+															type="text"
+															v-model="
+																formUser.user_email
+															"
+														></v-text-field>
 
-                                 <!--Password-->
-                                 <v-text-field v-model="formUser.user_password" id="password" prepend-icon="mdi-lock"
-                                    name="password" label="Password" :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
-                                    @click:append="() => (value = !value)"
-                                    :type="value ? 'password' : 'text'"></v-text-field>
+														<!--Password-->
+														<v-text-field
+															v-model="
+																formUser.user_password
+															"
+															id="password"
+															prepend-icon="mdi-lock"
+															name="password"
+															label="Password"
+															:append-icon="
+																value
+																	? 'mdi-eye-off'
+																	: 'mdi-eye'
+															"
+															@click:append="
+																() =>
+																	(value =
+																		!value)
+															"
+															:type="
+																value
+																	? 'password'
+																	: 'text'
+															"
+														></v-text-field>
 
-                                 <!--Validasi Password-->
-                                 <v-text-field id="ConfirmPassword" prepend-icon="mdi-lock" name="ConfirmPassword"
-                                    label="ConfirmPassword" :append-icon="value ? 'mdi-eye-off' : 'mdi-eye'"
-                                    @click:append="() => (value = !value)"
-                                    :type="value ? 'password' : 'text'"></v-text-field>
-
-
-                              </v-form>
-                           </v-card-text>
-                           <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn color="primary" to="/">Register</v-btn>
-                           </v-card-actions>
-                        </v-card>
-                     </v-flex>
-                  </v-layout>
-               </v-container>
-            </v-content>
-         </v-app>
-      </v-main>
-   </v-navigation>
+														<!--Validasi Password-->
+														<v-text-field
+															id="ConfirmPassword"
+															prepend-icon="mdi-lock"
+															name="ConfirmPassword"
+															label="Confirm Password"
+															:append-icon="
+																value
+																	? 'mdi-eye-off'
+																	: 'mdi-eye'
+															"
+															@click:append="
+																() =>
+																	(value =
+																		!value)
+															"
+															:type="
+																value
+																	? 'password'
+																	: 'text'
+															"
+														></v-text-field>
+													</v-col>
+												</v-row>
+											</v-layout>
+										</v-form>
+									</v-card-text>
+									<v-card-actions>
+										<v-spacer></v-spacer>
+										<v-btn dark color="red" @click="registerProcess"
+											>Register</v-btn
+										>
+									</v-card-actions>
+								</v-card>
+							</v-flex>
+						</v-layout>
+					</v-container>
+				</div>
+			</div>
+		</v-main>
+	</v-app>
 </template>
 
 <script>
 export default {
-   data: () => ({
-      value: String,
-      document,
-      formUser: {
-         user_photo: null,
-         user_name: "",
-         user_birthdate: "",
-         user_email: "",
-         user_password: "",
-      }
-
-   }),
-   methods: {
-      setPreviewImage() {
-         const [file] = document.querySelector("#imageInput").files;
-         if (file) {
-            document.querySelector("#imagePreview").src =
-               URL.createObjectURL(file);
-         }
-      },
-   },
+	data: () => ({
+		value: String,
+		document,
+		birthdatePicker: false,
+		formUser: {
+			user_photo: null,
+			user_name: "",
+			user_birthdate: "",
+			user_email: "",
+			user_password: "",
+		},
+	}),
+	methods: {
+		setPreviewImage() {
+			const [file] = document.querySelector("#imageInput").files;
+			if (file) {
+				document.querySelector("#imagePreview").src =
+					URL.createObjectURL(file);
+			}
+		},
+		registerProcess(){
+			fetch('https://caudex.herokuapp.com/api/register', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					user_photo: this.formUser.user_photo,
+					user_name: this.formUser.user_name,
+					user_birthdate: this.formUser.user_birthdate,
+					email: this.formUser.user_email,
+					password: this.formUser.user_password
+				})
+			})
+		}
+	},
 };
 </script>
 
 <style>
 .bg {
-   width: 100%;
-   height: 100%;
-   position: absolute;
-   top: 0;
-   left: 0;
-   background: url( '@/assets/bg.jpg') no-repeat center center;
-   background-size: cover;
-   background-color: red;
-   transform: scale(1.1);
- }
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: url("@/assets/bg.jpg") no-repeat center center;
+	background-size: cover;
+	background-color: red;
+	transform: scale(1.1);
+}
 </style>

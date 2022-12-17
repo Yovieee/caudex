@@ -51,7 +51,7 @@
 				<v-col>
 					<div class="text-right">
 						<v-btn color="primary">Save</v-btn>
-						<v-btn color="error" class="ml-4">Cancel</v-btn>
+						<v-btn color="error" class="ml-4" @click="window.history.back()">Cancel</v-btn>
 					</div>
 				</v-col>
 			</v-row>
@@ -65,6 +65,7 @@ export default {
 	data: () => ({
 		showPassword: false,
 		document,
+		window,
 		startDatePicker: false,
 		users: [
 			{ text: "User 1", value: 1 },

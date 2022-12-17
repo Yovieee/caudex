@@ -1,49 +1,116 @@
 <template>
-    <v-navigation>
-        <v-main class="ml-auto">
-            <div class="text-center">
-                <h4>Welcome to CauDex</h4>
-            </div>
-            <v-container>
-                <v-row>
-                    <v-col v-for="n in 4" :key="n" cols="4">
-                        <v-hover v-slot="{ hover }">
-                            <v-card elevation="1" :class="{ 'on-hover': hover }">
-                                <template slot="progress">
-                                    <v-progress-linear color="deep-purple" height="10"
-                                        indeterminate></v-progress-linear>
-                                </template>
+	<v-container>
+		<v-main class="ml-auto">
+			<div class="text-center">
+				<h4>Welcome to CAUDEX</h4>
+			</div>
+			<v-container>
+				<v-row>
+					<v-col v-for="item in items" :key="item.id" cols="2">
+						<v-card elevation="1">
+							<v-img
+								height="220"
+								:src="item.book_cover"
+							></v-img>
 
-                                <v-img height="220" src="https://cdn.vuetifyjs.com/images/cards/cooking.png"></v-img>
+							<v-card-title style="font-size:.8em">{{ item.book_title.length > 17 ? item.book_title.substring(0, 17)+'...' : item.book_title }}</v-card-title>
 
-                                <v-card-title>JUDUL</v-card-title>
+							<v-card-text>
+								<v-rating
+									:value="item.book_rating"
+									color="#FB8C00"
+									dense
+									half-increments
+									readonly
+									size="20"
+								>
+								</v-rating>
+								<div class="mt-4" style="font-size:.8em">{{ item.category_name }}</div>
 
-                                <v-card-text>
-                                    <v-row align="center" class="mx-0">
-                                        <v-rating 
-                                            :value="4.5" color="#FB8C00" dense half-increments readonly size="30">
-                                        </v-rating>
-                                    </v-row>
-                                </v-card-text>
+								<hr />
+							</v-card-text>
 
-                                <v-divider class="mx-4"></v-divider>
-                                <v-card-title>kategori</v-card-title>
-
-                                <v-card-actions>
-                                    <router-link to="DetailProduct">
-                                    <v-btn color="#00E676">
-                                        Lanjut
-                                    </v-btn>
-                                </router-link>
-                                </v-card-actions>
-                            </v-card>
-                        </v-hover>
-                    </v-col>
-                </v-row>
-            </v-container>
-            <v-main>
-                <router-view></router-view>
-              </v-main>
-        </v-main>
-    </v-navigation>
+							<v-card-actions>
+								<router-link to="DetailProduct">
+									<v-btn class="ml-2 mb-2" dark color="red">
+										Explore
+									</v-btn>
+								</router-link>
+							</v-card-actions>
+						</v-card>
+					</v-col>
+				</v-row>
+			</v-container>
+			<v-main>
+				<router-view></router-view>
+			</v-main>
+		</v-main>
+	</v-container>
 </template>
+<script>
+export default {
+	name: "HomePage",
+	data() {
+		return {
+			items: [
+                {
+                    id: 1,
+                    book_title: "Ini Sebuah Kisah Tentang",
+                    book_cover: "https://picsum.photos/200/300",
+                    book_rating: 4.5,
+                    category_name: "Fiction"
+                },
+                {
+                    id: 2,
+                    book_title: "Kuliah",
+                    book_cover: "https://picsum.photos/200/300",
+                    book_rating: 4.5,
+                    category_name: "Fiction"
+                },
+                {
+                    id: 3,
+                    book_title: "Informatika",
+                    book_cover: "https://picsum.photos/200/300",
+                    book_rating: 4.5,
+                    category_name: "Fiction"
+                },
+                {
+                    id: 4,
+                    book_title: "Sangat Menyenangkan",
+                    book_cover: "https://picsum.photos/200/300",
+                    book_rating: 4.5,
+                    category_name: "Fiction"
+                },
+                {
+                    id: 5,
+                    book_title: "Rasanya Seperti Anda Menjadi Orang Yang Paling Bahagia Di Dunia",
+                    book_cover: "https://picsum.photos/200/300",
+                    book_rating: 4.5,
+                    category_name: "Fiction"
+                },
+                {
+                    id: 6,
+                    book_title: "Maka Dari Itu",
+                    book_cover: "https://picsum.photos/200/300",
+                    book_rating: 4.5,
+                    category_name: "Fiction"
+                },
+                {
+                    id: 7,
+                    book_title: "Ayo Kita Kuliah",
+                    book_cover: "https://picsum.photos/200/300",
+                    book_rating: 4.5,
+                    category_name: "Fiction"
+                },
+                {
+                    id: 8,
+                    book_title: "Di Program Studi Informatika",
+                    book_cover: "https://picsum.photos/200/300",
+                    book_rating: 4.5,
+                    category_name: "Fiction"
+                },
+            ]
+		};
+	},
+};
+</script>

@@ -8,7 +8,12 @@
 				max-width="48"
 				src="../../../public/img/icons/ms-icon-310x310.png"
 			></v-img>
-			<v-toolbar-title>CAUDEX</v-toolbar-title>
+			<v-toolbar-title
+				><h4>
+					<span class="blue--text">CAU</span
+					><span class="red--text">DEX</span>
+				</h4></v-toolbar-title
+			>
 			<v-menu offset-y>
 				<template v-slot:activator="{ on }">
 					<v-avatar
@@ -96,7 +101,8 @@
 							<v-col cols="12" sm="6" md="4">
 								<v-file-input
 									:v-model="
-										typeof formCurrentUser.user_photo == 'string'
+										typeof formCurrentUser.user_photo ==
+										'string'
 											? null
 											: formCurrentUser.user_photo
 									"
@@ -110,7 +116,9 @@
 										:src="formCurrentUser.user_photo"
 										@click="
 											document
-												.querySelector('#currentUserPhoto')
+												.querySelector(
+													'#currentUserPhoto'
+												)
 												.click()
 										"
 										id="currentUserPhotoPreview"
@@ -149,7 +157,9 @@
 								>
 									<template v-slot:activator="{ on, attrs }">
 										<v-text-field
-											v-model="formCurrentUser.user_birthdate"
+											v-model="
+												formCurrentUser.user_birthdate
+											"
 											label="Birthdate"
 											prepend-icon="mdi-calendar"
 											readonly
@@ -159,7 +169,9 @@
 									</template>
 									<v-date-picker
 										v-model="formCurrentUser.user_birthdate"
-										@input="currentUserBirthdatePicker = false"
+										@input="
+											currentUserBirthdatePicker = false
+										"
 									></v-date-picker>
 								</v-menu>
 								<v-select
@@ -183,10 +195,19 @@
 									v-model="formCurrentUser.user_password"
 									label="Password"
 									prepend-icon="mdi-lock"
-									:type="currentUserShowPassword ? 'text' : 'password'"
-									@click:append="currentUserShowPassword = !currentUserShowPassword"
+									:type="
+										currentUserShowPassword
+											? 'text'
+											: 'password'
+									"
+									@click:append="
+										currentUserShowPassword =
+											!currentUserShowPassword
+									"
 									:append-icon="
-										currentUserShowPassword ? 'mdi-eye' : 'mdi-eye-off'
+										currentUserShowPassword
+											? 'mdi-eye'
+											: 'mdi-eye-off'
 									"
 								>
 								</v-text-field>
@@ -215,10 +236,10 @@ import router from "@/router";
 export default {
 	name: "AdminLayout",
 	data: () => ({
-    currentUserShowPassword: false,
+		currentUserShowPassword: false,
 		currentUserChangePassword: false,
 		document,
-    router,
+		router,
 		currentUserBirthdatePicker: false,
 		currentUser: {
 			id: 1,
@@ -230,7 +251,7 @@ export default {
 			user_role: 0,
 			user_verification: 1,
 		},
-    formCurrentUser: {
+		formCurrentUser: {
 			id: 1,
 			user_photo: (new Image().src =
 				"https://cdn.vuetifyjs.com/images/lists/1.jpg"),
