@@ -90,7 +90,7 @@
 </template>
 <script>
 export default {
-	name: "AdminUsersCreateComponent",
+	name: "AdminBooksCreateComponent",
 	data: () => ({
 		showPassword: false,
 		document,

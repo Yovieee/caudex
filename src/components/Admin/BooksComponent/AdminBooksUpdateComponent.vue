@@ -3,7 +3,7 @@
 		<v-form lazy-validation>
 			<v-row>
 				<v-col>
-					<h1 class="mb-6">Update Books</h1>
+					<h1 class="mb-6">Update Book</h1>
 				</v-col>
 			</v-row>
 			<v-row>

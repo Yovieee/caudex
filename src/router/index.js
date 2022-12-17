@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/HomeView.vue'),
+    component: () => import('../views/LandingPage.vue'),
   },
   {
     path: '/Admin',
@@ -87,11 +87,17 @@ const routes = [
         component: () => import('../components/Admin/SubscriptionsComponent/AdminSubscriptionsShowComponent.vue')
       },
       {
-        path: '/Admin/Subscriptions/Update/:book',
+        path: '/Admin/Subscriptions/Update/:subscription',
         name: 'update subscriptions',
         meta: { title: 'Update Subscriptions' },
         component: () => import('../components/Admin/SubscriptionsComponent/AdminSubscriptionsUpdateComponent.vue')
-      }
+      },
+      {
+        path: '/Admin/Analytics',
+        name: 'analytics',
+        meta: { title: 'Analytics' },
+        component: () => import('../components/Admin/AdminAnalyticsComponent.vue')
+      },
     ]
   }
 ]

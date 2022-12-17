@@ -3,7 +3,7 @@
 		<v-form>
 			<v-row>
 				<v-col>
-					<h1 class="mb-6">Create Users</h1>
+					<h1 class="mb-6">Create User</h1>
 				</v-col>
 			</v-row>
 			<v-row>

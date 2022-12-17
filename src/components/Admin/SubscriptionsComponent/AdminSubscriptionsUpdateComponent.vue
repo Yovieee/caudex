@@ -9,7 +9,7 @@
 			<v-row>
 				<v-col>
 					<v-select
-						v-model="formSubscription.subscription_user"
+						v-model="subscription.subscription_user"
 						:items="users"
 						label="User"
 						prepend-icon="mdi-account"
@@ -25,8 +25,8 @@
 					>
 						<template v-slot:activator="{ on, attrs }">
 							<v-text-field
-								v-model="formSubscription.subscription_start"
-								label="Birthdate"
+								v-model="subscription.subscription_start"
+								label="Start Date"
 								prepend-icon="mdi-calendar"
 								readonly
 								v-bind="attrs"
@@ -34,12 +34,12 @@
 							></v-text-field>
 						</template>
 						<v-date-picker
-							v-model="formSubscription.subscription_start"
+							v-model="subscription.subscription_start"
 							@input="startDatePicker = false"
 						></v-date-picker>
 					</v-menu>
 					<v-select
-						v-model="formSubscription.subscription_plan"
+						v-model="subscription.subscription_plan"
 						:items="[{ text: '1 Month', value: 1 }, { text: '6 Month', value: 2 }, { text: '1 Year', value: 3 }, { text: '3 Year', value: 4 }, { text: '5 Year', value: 5 } ]"
 						label="Plan"
 						prepend-icon="mdi-clipboard-text-clock"
@@ -63,11 +63,18 @@ import router from '@/router';
 export default {
 	name: "AdminSubscriptionsUpdateComponent",
 	data: () => ({
-		startDatePicker: false,
+		showPassword: false,
 		document,
-		router,
 		startDatePicker: false,
-		formSubscription: JSON.parse(window.atob(router.currentRoute.params.subscription)),
+		users: [
+			{ text: "User 1", value: 1 },
+			{ text: "User 2", value: 2 },
+			{ text: "User 3", value: 3 },
+			{ text: "User 4", value: 4 },
+		],
+		subscription: JSON.parse(
+			window.atob(router.currentRoute.params.subscription)
+		),
 	}),
 };
 </script>

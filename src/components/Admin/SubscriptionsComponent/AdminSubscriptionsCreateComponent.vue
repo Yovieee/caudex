@@ -15,6 +15,29 @@
 						prepend-icon="mdi-account"
 					>
 					</v-select>
+					<v-menu
+						v-model="startDatePicker"
+						:close-on-content-click="false"
+						:nudge-right="40"
+						transition="scale-transition"
+						offset-y
+						min-width="auto"
+					>
+						<template v-slot:activator="{ on, attrs }">
+							<v-text-field
+								v-model="formSubscription.subscription_start"
+								label="Start Date"
+								prepend-icon="mdi-calendar"
+								readonly
+								v-bind="attrs"
+								v-on="on"
+							></v-text-field>
+						</template>
+						<v-date-picker
+							v-model="formSubscription.subscription_start"
+							@input="startDatePicker = false"
+						></v-date-picker>
+					</v-menu>
 					<v-select
 						v-model="formSubscription.subscription_plan"
 						:items="[{ text: '1 Month', value: 1 }, { text: '6 Month', value: 2 }, { text: '1 Year', value: 3 }, { text: '3 Year', value: 4 }, { text: '5 Year', value: 5 } ]"
@@ -41,7 +64,7 @@ export default {
 	data: () => ({
 		showPassword: false,
 		document,
-		birthdatePicker: false,
+		startDatePicker: false,
 		users: [
 			{ text: "User 1", value: 1 },
 			{ text: "User 2", value: 2 },
@@ -50,17 +73,9 @@ export default {
 		],
 		formSubscription: {
 			subscription_user: null,
+			subscription_start: null,
 			subscription_plan: null,
 		},
 	}),
-	methods: {
-		setPreviewImage() {
-			const [file] = document.querySelector("#imageInput").files;
-			if (file) {
-				document.querySelector("#imagePreview").src =
-					URL.createObjectURL(file);
-			}
-		},
-	},
 };
 </script>

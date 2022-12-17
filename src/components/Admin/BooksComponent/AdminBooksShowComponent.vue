@@ -3,7 +3,7 @@
 		<v-form>
 			<v-row>
 				<v-col>
-					<h1 class="mb-6">Show Users</h1>
+					<h1 class="mb-6">Show Book</h1>
 				</v-col>
 			</v-row>
 			<v-row>
@@ -74,7 +74,7 @@
 <script>
 import router from '@/router';
 export default {
-	name: "AdminUsersShowComponent",
+	name: "AdminBooksShowComponent",
 	data: () => ({
 		document,
 		birthdatePicker: false,

@@ -39,7 +39,7 @@
 					link
 					tag="router-link"
 					:to="
-						'/Admin/Users/Update/' +
+						'/Admin/Subscriptions/Update/' +
 						window.btoa(JSON.stringify(item))
 					"
 				>
@@ -74,7 +74,7 @@
 <script>
 import router from '@/router';
 export default {
-	name: "AdminUsersReadComponent",
+	name: "AdminSubscriptionsReadComponent",
 	data() {
 		return {
 			router,
@@ -93,24 +93,32 @@ export default {
 				{
 					id: 1,
 					user_name: "User 1",
+					subscription_user: 1,
+					subscription_plan: 1,
 					subscription_start: "2020-01-01",
 					subscription_expired: "2020-01-31",
 				},
 				{
 					id: 2,
 					user_name: "User 2",
+					subscription_user: 2,
+					subscription_plan: 2,
 					subscription_start: "2020-01-01",
 					subscription_expired: "2020-01-31",
 				},
 				{
 					id: 3,
 					user_name: "User 3",
+					subscription_user: 3,
+					subscription_plan: 3,
 					subscription_start: "2020-01-01",
 					subscription_expired: "2020-01-31",
 				},
 				{
 					id: 4,
 					user_name: "User 4",
+					subscription_user: 4,
+					subscription_plan: 4,
 					subscription_start: "2020-01-01",
 					subscription_expired: "2020-01-31",
 				}

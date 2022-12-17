@@ -3,7 +3,7 @@
 		<v-form>
 			<v-row>
 				<v-col>
-					<h1 class="mb-6">Update Users</h1>
+					<h1 class="mb-6">Update User</h1>
 				</v-col>
 			</v-row>
 			<v-row>
