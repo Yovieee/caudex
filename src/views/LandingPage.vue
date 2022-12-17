@@ -16,7 +16,7 @@
         <div class="row">
           <div class="col-12">
             <nav class="main-nav">
-              <router-link to="../home" class="logo">
+              <router-link to="/" class="logo">
                 <h4>Cau<span>Dex</span></h4>
               </router-link>
               <ul class="nav">
@@ -50,7 +50,7 @@
                     counselors, and the most patient of teachers.” <a rel="nofollow"
                       href="https://en.wikipedia.org/wiki/Charles_William_Eliot" target="_parent">by Charles William
                       Eliot </a>.</p>
-                  <form id="search" action="#" method="GET">
+                  <!-- <form id="search" action="#" method="GET">
                     <fieldset>
                       <input type="address" name="address" class="email" placeholder="Your website URL..."
                         autocomplete="on" required>
@@ -58,7 +58,7 @@
                     <fieldset>
                       <button type="submit" class="main-button">Analyze Site</button>
                     </fieldset>
-                  </form>
+                  </form> -->
                 </div>
               </div>
               <div class="col-lg-6">
