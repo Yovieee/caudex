@@ -72,7 +72,7 @@
 										>
 									</v-toolbar>
 									<v-card-text>
-										<v-form>
+										<v-form enctype="multipart/form-data" id="formUserElement">
 											<v-layout>
 												<v-row>
 													<v-col>
@@ -123,7 +123,7 @@
 															label="Name"
 															type="text"
 															v-model="
-																formUser.name
+																formUser.user_name
 															"
 														></v-text-field>
 
@@ -176,14 +176,14 @@
 															label="Email"
 															type="text"
 															v-model="
-																formUser.user_email
+																formUser.email
 															"
 														></v-text-field>
 
 														<!--Password-->
 														<v-text-field
 															v-model="
-																formUser.user_password
+																formUser.password
 															"
 															id="password"
 															prepend-icon="mdi-lock"
@@ -250,6 +250,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+import router from '@/router'
+import toastr from 'toastr'
 export default {
 	data: () => ({
 		value: String,
@@ -259,8 +262,9 @@ export default {
 			user_photo: null,
 			user_name: "",
 			user_birthdate: "",
-			user_email: "",
-			user_password: "",
+			email: "",
+			password: "",
+			user_role: "Customer"
 		},
 	}),
 	methods: {
@@ -272,20 +276,24 @@ export default {
 			}
 		},
 		registerProcess(){
-			fetch('https://caudex.herokuapp.com/api/register', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					user_photo: this.formUser.user_photo,
-					user_name: this.formUser.user_name,
-					user_birthdate: this.formUser.user_birthdate,
-					email: this.formUser.user_email,
-					password: this.formUser.user_password
-				})
+			console.log("tes")
+			let formData = new FormData()
+			formData.append('user_photo', this.formUser.user_photo)
+			formData.append('user_name', this.formUser.user_name)
+			formData.append('user_birthdate', this.formUser.user_birthdate)
+			formData.append('email', this.formUser.email)
+			formData.append('password', this.formUser.password)
+			formData.append('user_role', this.formUser.user_role)
+			axios.post('https://0ff9-20-210-227-237.jp.ngrok.io/api/register',formData)
+			.then(()=> {
+				toastr.success('Anda Berhasil Register')
+			}).catch(error=>{
+				toastr.error('Register anda Gagal')
+				
 			})
-		}
+		},
+		
+		
 	},
 };
 </script>
