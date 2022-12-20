@@ -38,11 +38,9 @@
 							</v-card-text>
 
 							<v-card-actions>
-								<router-link :to="'/Customer/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/DetailProduct/' + item.id">
-									<v-btn class="ml-2 mb-2" dark color="red">
+									<v-btn class="ml-2 mb-2" dark color="red" :to="'/Customer/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/DetailProduct/' + item.id" :disabled="JSON.parse(window.atob(router.currentRoute.params.user)).user_membership || item.book_availability == '1'">
 										Explore
 									</v-btn>
-								</router-link>
 							</v-card-actions>
 						</v-card>
 					</v-col>
@@ -76,7 +74,8 @@ export default {
 		});
 		return {
 			books,
-            router
+            router,
+			window
 		};
 	},
 };

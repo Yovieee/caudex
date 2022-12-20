@@ -272,11 +272,6 @@ export default {
 				text: "Subscriptions",
 				to: "/Admin/" + router.currentRoute.params.user + "/" + router.currentRoute.params.access_token + "/Subscriptions",
 			},
-			{
-				icon: "mdi-chart-box",
-				text: "Analytics",
-				to: "/Admin/" + router.currentRoute.params.user + "/" + router.currentRoute.params.access_token + "/Analytics",
-			},
 		],
 	}),
 	methods: {

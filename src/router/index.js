@@ -139,15 +139,6 @@ const routes = [
 						"../components/Admin/SubscriptionsComponent/AdminSubscriptionsUpdateComponent.vue"
 					),
 			},
-			{
-				path: "/Admin/:user/:access_token/Analytics",
-				name: "analytics",
-				meta: { title: "Analytics" },
-				component: () =>
-					import(
-						"../components/Admin/AdminAnalyticsComponent.vue"
-					),
-			},
 		],
 	},
 	{

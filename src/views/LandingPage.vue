@@ -1,15 +1,5 @@
 <template>
   <v-container>
-    <div id="js-preloader" class="js-preloader">
-      <div class="preloader-inner">
-        <span class="dot"></span>
-        <div class="dots">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-    </div>
 
     <div class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
       <div class="container">
