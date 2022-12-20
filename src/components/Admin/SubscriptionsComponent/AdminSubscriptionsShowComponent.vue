@@ -12,7 +12,7 @@
 						link
 						tag="router-link"
 						:to="
-							'/Admin/Subscriptions/Update/' +
+							'/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Subscriptions/Update/' +
 							router.currentRoute.params.subscription
 						"
 						><v-icon>mdi-pencil</v-icon></v-btn
@@ -41,20 +41,18 @@
 						prepend-icon="mdi-calendar"
 						readonly
 					></v-text-field>
-					<v-select
-						v-model="subscription.subscription_plan"
-						:items="[
-							{ text: '1 Month', value: 1 },
-							{ text: '6 Month', value: 2 },
-							{ text: '1 Year', value: 3 },
-							{ text: '3 Year', value: 4 },
-							{ text: '5 Year', value: 5 },
-						]"
-						label="Plan"
-						prepend-icon="mdi-clipboard-text-clock"
+					<v-text-field
+						v-model="subscription.subscription_expired"
+						label="Start Date"
+						prepend-icon="mdi-calendar"
 						readonly
-					>
-					</v-select>
+					></v-text-field>
+					<v-text-field
+						v-model="subscription.subscription_price"
+						label="Price"
+						prepend-icon="mdi-currency-usd"
+						readonly
+					></v-text-field>
 				</v-col>
 			</v-row>
 		</v-form>
@@ -84,6 +82,9 @@
 </template>
 <script>
 import router from "@/router";
+import axios from "axios";
+import toastr from "toastr";
+import { ref, onMounted } from "vue";
 export default {
 	name: "AdminSubscriptionsShowComponent",
 	data: () => ({
@@ -93,18 +94,56 @@ export default {
 		subscription: JSON.parse(
 			window.atob(router.currentRoute.params.subscription)
 		),
-		users: [
-			{ text: "User 1", value: 1 },
-			{ text: "User 2", value: 2 },
-			{ text: "User 3", value: 3 },
-			{ text: "User 4", value: 4 },
-		],
 	}),
 	methods: {
 		deleteProcess() {
-			this.closeDeleteDialog();
-			//to do delete process
+			axios.delete('https://sitohhang.com/caudex_backend/public/api/Subscriptions/' + this.subscription.id,
+				{
+					headers: {
+						Authorization: "Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then(response => {
+					toastr.success('Subscription deleted')
+					axios.get('https://sitohhang.com/caudex_backend/public/api/Subscriptions',
+					{
+						headers: {
+							Authorization: "Bearer " + router.currentRoute.params.access_token,
+						},
+					})
+					.then(response => {
+						router.push('/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Subscriptions')
+					})
+					.catch(error => {
+						toastr.error('Something went wrong')
+					})
+				})
+				.catch(error => {
+					toastr.error('Something went wrong')
+				})
+			this.deleteDialog = false;
 		},
 	},
+	setup() {
+		let users = ref([]);
+		onMounted(() => {
+			axios
+				.get("https://sitohhang.com/caudex_backend/public/api/user",
+				{
+					headers: {
+						Authorization: "Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then((response) => {
+					users.value = response.data.data;
+				})
+				.catch((error) => {
+					toastr.error('Something went wrong!');
+				});
+		});
+		return {
+			users
+		}
+	}
 };
 </script>

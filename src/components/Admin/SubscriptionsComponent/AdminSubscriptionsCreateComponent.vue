@@ -38,13 +38,34 @@
 							@input="startDatePicker = false"
 						></v-date-picker>
 					</v-menu>
-					<v-select
-						v-model="formSubscription.subscription_plan"
-						:items="[{ text: '1 Month', value: 1 }, { text: '6 Month', value: 2 }, { text: '1 Year', value: 3 }, { text: '3 Year', value: 4 }, { text: '5 Year', value: 5 } ]"
-						label="Plan"
-						prepend-icon="mdi-clipboard-text-clock"
+					<v-menu
+						v-model="expiredDatePicker"
+						:close-on-content-click="false"
+						:nudge-right="40"
+						transition="scale-transition"
+						offset-y
+						min-width="auto"
 					>
-					</v-select>
+						<template v-slot:activator="{ on, attrs }">
+							<v-text-field
+								v-model="formSubscription.subscription_expired"
+								label="Expired Date"
+								prepend-icon="mdi-calendar"
+								readonly
+								v-bind="attrs"
+								v-on="on"
+							></v-text-field>
+						</template>
+						<v-date-picker
+							v-model="formSubscription.subscription_expired"
+							@input="expiredDatePicker = false"
+						></v-date-picker>
+					</v-menu>
+					<v-text-field
+						v-model="formSubscription.subscription_price"
+						label="Price"
+						prepend-icon="mdi-currency-usd"
+					></v-text-field>
 				</v-col>
 			</v-row>
 			<v-row>
@@ -59,6 +80,10 @@
 	</div>
 </template>
 <script>
+import { ref, onMounted } from "vue";
+import axios from "axios";
+import router from "@/router";
+import toastr from "toastr";
 export default {
 	name: "AdminSubscriptionsCreateComponent",
 	data: () => ({
@@ -66,17 +91,33 @@ export default {
 		document,
 		window,
 		startDatePicker: false,
-		users: [
-			{ text: "User 1", value: 1 },
-			{ text: "User 2", value: 2 },
-			{ text: "User 3", value: 3 },
-			{ text: "User 4", value: 4 },
-		],
+		expiredDatePicker: false,
 		formSubscription: {
 			subscription_user: null,
 			subscription_start: null,
 			subscription_plan: null,
 		},
 	}),
+	setup() {
+		let users = ref([]);
+		onMounted(() => {
+			axios
+				.get("https://sitohhang.com/caudex_backend/public/api/user",
+				{
+					headers: {
+						Authorization: "Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then((response) => {
+					users.value = response.data.data;
+				})
+				.catch((error) => {
+					toastr.error('Something went wrong!');
+				});
+		});
+		return {
+			users
+		}
+	}
 };
 </script>

@@ -5,44 +5,36 @@
 				<h1 class="mb-6">Subscriptions</h1>
 			</v-col>
 			<v-col align="right">
-				<v-btn
-					class="ma-2"
-					color="primary"
-					link
-					tag="router-link"
-					to="/Admin/Subscriptions/Create"
-					><v-icon>mdi-plus</v-icon></v-btn
-				>
+				<v-btn class="ma-2" color="primary" link tag="router-link"
+					:to="'/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Subscriptions/Create'"><v-icon>mdi-plus</v-icon></v-btn>
 			</v-col>
 		</v-row>
-		<v-data-table :headers="headers" :items="subscriptions" @click:row="(item) => router.push('/Admin/Subscriptions/Show/' + window.btoa(JSON.stringify(item)))">
-			<template v-slot:item.subscription_start=" { item }">
+		<v-data-table :headers="headers" :items="subscriptions"
+			@click:row="(item) => router.push('/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Subscriptions/Show/' + window.btoa(JSON.stringify(item)))">
+			<template v-slot:item.subscription_start="{ item }">
 				{{ new Date(item.subscription_start).toLocaleString("en-US", {
 						day: "numeric",
 						month: "short",
 						year: "numeric",
-					}) }}
+					})
+				}}
 			</template>
-			<template v-slot:item.subscription_expired=" { item }">
+			<template v-slot:item.subscription_expired="{ item }">
 				{{ new Date(item.subscription_expired).toLocaleString("en-US", {
 						day: "numeric",
 						month: "short",
 						year: "numeric",
-					}) }}
+					})
+				}}
 			</template>
 			<template v-slot:item.subscription_actions="{ item }">
 				<v-icon small class="mr-2" @click.stop="openDeleteDialog(item)">
 					mdi-delete
 				</v-icon>
-				<v-icon
-					small
-					link
-					tag="router-link"
-					:to="
-						'/Admin/Subscriptions/Update/' +
-						window.btoa(JSON.stringify(item))
-					"
-				>
+				<v-icon small link tag="router-link" :to="
+					'/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Subscriptions/Update/' +
+					window.btoa(JSON.stringify(item))
+				">
 					mdi-pencil
 				</v-icon>
 			</template>
@@ -55,11 +47,7 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 
-					<v-btn
-						color="green darken-1"
-						text
-						@click="closeDeleteDialog()"
-					>
+					<v-btn color="green darken-1" text @click="closeDeleteDialog()">
 						Cancel
 					</v-btn>
 
@@ -72,7 +60,10 @@
 	</div>
 </template>
 <script>
-import router from '@/router';
+import router from '@/router'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import toastr from 'toastr';
 export default {
 	name: "AdminSubscriptionsReadComponent",
 	data() {
@@ -89,40 +80,6 @@ export default {
 				{ text: "Expired", value: "subscription_expired" },
 				{ text: "Actions", value: "subscription_actions" },
 			],
-			subscriptions: [
-				{
-					id: 1,
-					user_name: "User 1",
-					subscription_user: 1,
-					subscription_plan: 1,
-					subscription_start: "2020-01-01",
-					subscription_expired: "2020-01-31",
-				},
-				{
-					id: 2,
-					user_name: "User 2",
-					subscription_user: 2,
-					subscription_plan: 2,
-					subscription_start: "2020-01-01",
-					subscription_expired: "2020-01-31",
-				},
-				{
-					id: 3,
-					user_name: "User 3",
-					subscription_user: 3,
-					subscription_plan: 3,
-					subscription_start: "2020-01-01",
-					subscription_expired: "2020-01-31",
-				},
-				{
-					id: 4,
-					user_name: "User 4",
-					subscription_user: 4,
-					subscription_plan: 4,
-					subscription_start: "2020-01-01",
-					subscription_expired: "2020-01-31",
-				}
-			],
 		};
 	},
 	methods: {
@@ -135,9 +92,52 @@ export default {
 			this.deleteTarget = {};
 		},
 		deleteProcess() {
+			axios.delete('https://sitohhang.com/caudex_backend/public/api/Subscriptions/' + this.deleteTarget.id,
+				{
+					headers: {
+						Authorization: "Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then(response => {
+					toastr.success('Subscription deleted')
+					axios.get('https://sitohhang.com/caudex_backend/public/api/Subscriptions',
+					{
+						headers: {
+							Authorization: "Bearer " + router.currentRoute.params.access_token,
+						},
+					})
+					.then(response => {
+						this.subscriptions = response.data.data
+					})
+					.catch(error => {
+						toastr.error('Something went wrong')
+					})
+				})
+				.catch(error => {
+					toastr.error('Something went wrong')
+				})
 			this.closeDeleteDialog();
-			//to do delete process
 		},
+	},
+	setup() {
+		let subscriptions = ref([])
+		onMounted(() => {
+			axios.get('https://sitohhang.com/caudex_backend/public/api/Subscriptions',
+				{
+					headers: {
+						Authorization: "Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then(response => {
+					subscriptions.value = response.data.data
+				})
+				.catch(error => {
+					toastr.error('Something went wrong')
+				})
+		});
+		return {
+			subscriptions,
+		};
 	},
 };
 </script>

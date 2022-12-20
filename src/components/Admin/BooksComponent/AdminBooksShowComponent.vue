@@ -123,6 +123,7 @@
 import router from '@/router';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import toastr from 'toastr';
 export default {
 	name: "AdminBooksShowComponent",
 	data: () => ({
@@ -141,9 +142,32 @@ export default {
 	}),
 	methods: {
 		deleteProcess() {
-			this.closeDeleteDialog();
-			//to do delete process
-		},
+            axios
+				.delete("https://sitohhang.com/caudex_backend/public/api/books/" + this.book.id, {
+					headers: {
+						Authorization:
+							"Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then((response) => {
+					this.deleteDialog = false;
+					axios
+						.get("https://sitohhang.com/caudex_backend/public/api/books", {
+							headers: {
+								Authorization:
+									"Bearer " + router.currentRoute.params.access_token,
+							},
+						})
+						.then((response) => {
+							this.books = response.data.data
+							toastr.success("Book deleted successfully");
+							router.push('/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Books')
+						}).catch((error) => {
+							toastr.error("Something went wrong");
+						});
+				});
+
+        }
 	},
 	setup() {
 		let listOfReviews = ref([]);

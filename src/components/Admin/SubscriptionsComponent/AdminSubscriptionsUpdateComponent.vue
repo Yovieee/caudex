@@ -9,10 +9,11 @@
 			<v-row>
 				<v-col>
 					<v-select
-						v-model="subscription.subscription_user"
+						v-model="formSubscription.subscription_user"
 						:items="users"
 						label="User"
 						prepend-icon="mdi-account"
+						disabled
 					>
 					</v-select>
 					<v-menu
@@ -25,8 +26,32 @@
 					>
 						<template v-slot:activator="{ on, attrs }">
 							<v-text-field
-								v-model="subscription.subscription_start"
+								v-model="formSubscription.subscription_start"
 								label="Start Date"
+								prepend-icon="mdi-calendar"
+								readonly
+								v-bind="attrs"
+								v-on="on"
+								disabled
+							></v-text-field>
+						</template>
+						<v-date-picker
+							v-model="formSubscription.subscription_start"
+							@input="startDatePicker = false"
+						></v-date-picker>
+					</v-menu>
+					<v-menu
+						v-model="expiredDatePicker"
+						:close-on-content-click="false"
+						:nudge-right="40"
+						transition="scale-transition"
+						offset-y
+						min-width="auto"
+					>
+						<template v-slot:activator="{ on, attrs }">
+							<v-text-field
+								v-model="formSubscription.subscription_expired"
+								label="Expired Date"
 								prepend-icon="mdi-calendar"
 								readonly
 								v-bind="attrs"
@@ -34,23 +59,21 @@
 							></v-text-field>
 						</template>
 						<v-date-picker
-							v-model="subscription.subscription_start"
-							@input="startDatePicker = false"
+							v-model="formSubscription.subscription_expired"
+							@input="expiredDatePicker = false"
 						></v-date-picker>
 					</v-menu>
-					<v-select
-						v-model="subscription.subscription_plan"
-						:items="[{ text: '1 Month', value: 1 }, { text: '6 Month', value: 2 }, { text: '1 Year', value: 3 }, { text: '3 Year', value: 4 }, { text: '5 Year', value: 5 } ]"
-						label="Plan"
-						prepend-icon="mdi-clipboard-text-clock"
-					>
-					</v-select>
+					<v-text-field
+						v-model="formSubscription.subscription_price"
+						label="Price"
+						prepend-icon="mdi-currency-usd"
+					></v-text-field>
 				</v-col>
 			</v-row>
 			<v-row>
 				<v-col>
 					<div class="text-right">
-						<v-btn color="primary">Save</v-btn>
+						<v-btn color="primary" @click="updateSubscriptionProcess">Save</v-btn>
 						<v-btn color="error" class="ml-4" @click="window.history.back()">Cancel</v-btn>
 					</div>
 				</v-col>
@@ -60,6 +83,9 @@
 </template>
 <script>
 import router from '@/router';
+import axios from 'axios';
+import toastr from 'toastr';
+import { ref, onMounted } from 'vue';
 export default {
 	name: "AdminSubscriptionsUpdateComponent",
 	data: () => ({
@@ -67,15 +93,52 @@ export default {
 		document,
 		window,
 		startDatePicker: false,
-		users: [
-			{ text: "User 1", value: 1 },
-			{ text: "User 2", value: 2 },
-			{ text: "User 3", value: 3 },
-			{ text: "User 4", value: 4 },
-		],
-		subscription: JSON.parse(
+		expiredDatePicker: false,
+		formSubscription: JSON.parse(
 			window.atob(router.currentRoute.params.subscription)
 		),
 	}),
+	setup() {
+		let users = ref([]);
+		onMounted(() => {
+			axios
+				.get("https://sitohhang.com/caudex_backend/public/api/user",
+				{
+					headers: {
+						Authorization: "Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then((response) => {
+					users.value = response.data.data;
+				})
+				.catch((error) => {
+					toastr.error('Something went wrong!');
+				});
+		});
+		return {
+			users
+		}
+	},
+	methods: {
+		updateSubscriptionProcess() {
+			axios
+				.put(
+					"https://sitohhang.com/caudex_backend/public/api/Subscriptions/" + this.formSubscription.id,
+					this.formSubscription,
+					{
+						headers: {
+							Authorization: "Bearer " + router.currentRoute.params.access_token,
+						},
+					}
+				)
+				.then((response) => {
+					toastr.success('Subscription updated successfully!');
+					router.push('/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Subscriptions');
+				})
+				.catch((error) => {
+					toastr.error('Something went wrong!');
+				});
+		}
+	}
 };
 </script>
