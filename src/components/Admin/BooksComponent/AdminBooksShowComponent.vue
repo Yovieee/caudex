@@ -12,7 +12,7 @@
 						link
 						tag="router-link"
 						:to="
-							'/Admin/Books/Update/' +
+							'/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Books/Update/' +
 							router.currentRoute.params.book
 						"
 						><v-icon>mdi-pencil</v-icon></v-btn
@@ -29,7 +29,7 @@
 				<v-col cols="12" sm="6" md="4">
 					<div class="text-center">
 						<img
-							:src="book.book_cover"
+							:src="'https://sitohhang.com/caudex_backend/public/images/' + book.book_cover"
 							style="
 								max-width: 300px;
 								max-height: 400px;
@@ -55,32 +55,29 @@
 						readonly
 					>
 					</v-text-field>
-					<v-select
-						v-model="book.book_publisher"
-						:items="publishers"
+					<v-text-field
+						v-model="book.publisher_name"
 						label="Publisher"
 						prepend-icon="mdi-domain"
 						readonly
 					>
-					</v-select>
-					<v-autocomplete
-						v-model="book.book_author"
-						:items="authors"
+					</v-text-field>
+					<v-text-field
+						v-model="book.author_name"
 						label="Author"
 						prepend-icon="mdi-account-supervisor"
 						multiple
 						readonly
 					>
-					</v-autocomplete>
-					<v-autocomplete
-						v-model="book.book_category"
-						:items="categories"
+					</v-text-field>
+					<v-text-field
+						v-model="book.category_name"
 						label="Category"
 						prepend-icon="mdi-tag"
 						multiple
 						readonly
 					>
-					</v-autocomplete>
+					</v-text-field>
 				</v-col>
 			</v-row>
 			<v-row>
@@ -124,6 +121,8 @@
 </template>
 <script>
 import router from '@/router';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 export default {
 	name: "AdminBooksShowComponent",
 	data: () => ({
@@ -135,53 +134,32 @@ export default {
         headers: [
                 { text: 'ID', value: 'id' },
                 { text: 'User', value: 'user_name' },
-                { text: 'Date', value: 'review_date'},
-                { text: 'Rating', value: 'review_rating'},
-                { text: 'Comment', value: 'review_comment'}
+                { text: 'Date', value: 'reviews_date'},
+                { text: 'Rating', value: 'reviews_rating'},
+                { text: 'Comment', value: 'reviews_comment'}
             ],
-        listOfReviews: [
-            {
-                id: 1,
-                user_name: 'John Doe',
-                review_date: '2020-01-01',
-                review_rating: 5,
-                review_comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquam nisl, vel aliquam nunc nisl eu nunc. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquam nisl, vel aliquam nunc nisl eu nunc.'
-            },
-            {
-                id: 2,
-                user_name: 'Jane Doe',
-                review_date: '2020-01-01',
-                review_rating: 5,
-                review_comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquam nisl, vel aliquam nunc nisl eu nunc. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquam nisl, vel aliquam nunc nisl eu nunc.'
-            },
-            {
-                id: 3,
-                user_name: 'John Doe',
-                review_date: '2020-01-01',
-                review_rating: 5,
-                review_comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquam nisl, vel aliquam nunc nisl eu nunc. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquam nisl, vel aliquam nunc nisl eu nunc.'
-            },
-            {
-                id: 4,
-                user_name: 'Jane Doe',
-                review_date: '2020-01-01',
-                review_rating: 5,
-                review_comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquam nisl, vel aliquam nunc nisl eu nunc. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquam nisl, vel aliquam nunc nisl eu nunc.'
-            },
-            {
-                id: 5,
-                user_name: 'John Doe',
-                review_date: '2020-01-01',
-                review_rating: 5,
-                review_comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquam nisl, vel aliquam nunc nisl eu nunc. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquam nisl, vel aliquam nunc nisl eu nunc.'
-            },
-        ]
 	}),
 	methods: {
 		deleteProcess() {
 			this.closeDeleteDialog();
 			//to do delete process
 		},
+	},
+	setup() {
+		let listOfReviews = ref([]);
+		onMounted(() => {
+			axios.get('https://sitohhang.com/caudex_backend/public/api/Reviews/' + JSON.parse(window.atob(router.currentRoute.params.book)).id, {
+                        headers: {
+                            Authorization: "Bearer " + router.currentRoute.params.access_token,
+                        },
+                    })
+                        .then((responseReviews) => {
+                            listOfReviews.value = responseReviews.data.data
+                        })
+		})
+		return {
+			listOfReviews
+		};
 	},
 };
 </script>

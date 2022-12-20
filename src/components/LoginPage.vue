@@ -9,7 +9,7 @@
 				<div class="row">
 					<div class="col-14">
 						<nav class="main-nav">
-							<router-link to="../" class="logo">
+							<router-link to="/" class="logo">
 								<v-row>
 									<v-col>
 										<v-img
@@ -65,12 +65,14 @@
 									<v-card-text>
 										<v-form>
 											<v-text-field
+											v-model="formUser.email"
 												prepend-icon="mdi-email"
 												name="email"
 												label="Email"
 												type="text"
 											></v-text-field>
 											<v-text-field
+											v-model="formUser.password"
 												id="password"
 												prepend-icon="mdi-lock"
 												name="password"
@@ -91,7 +93,7 @@
 									</v-card-text>
 									<v-card-actions>
 										<v-spacer></v-spacer>
-										<v-btn dark color="blue" to="/"
+										<v-btn dark color="blue" @click="loginProcess"
 											>Login</v-btn
 										>
 									</v-card-actions>
@@ -106,12 +108,35 @@
 </template>
 
 <script>
+import axios from 'axios'
+import router from '@/router'
+import toastr from 'toastr'
 export default {
 	data() {
 		return {
 			value: String,
+			formUser: {
+				email: "",
+				password: ""
+			}
 		};
 	},
+	methods: {
+		loginProcess(){
+			axios.post('https://sitohhang.com/caudex_backend/public/api/login', this.formUser)
+			.then(response => {
+				toastr.success('You have succesfully loged in!')
+				if(response.data.user.user_role == 'Administrator'){
+					router.push({ path: '/Admin/' + window.btoa(JSON.stringify(response.data.user)) + '/' + response.data.access_token + '/Dashboard/' })
+				}else{
+					router.push({ path: '/Customer/' + window.btoa(JSON.stringify(response.data.user)) + '/' + response.data.access_token + '/Homepage/' })
+				}
+			}).catch(()=>{
+				toastr.error('Login failed!')
+			})
+		}
+
+	}
 };
 </script>
 

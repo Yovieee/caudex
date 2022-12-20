@@ -10,7 +10,7 @@
 					<div class="row">
 						<div class="col-14">
 							<nav class="main-nav">
-								<router-link to="../" class="logo">
+								<router-link to="/" class="logo">
 									<v-row>
 										<v-col>
 											<v-img
@@ -276,21 +276,35 @@ export default {
 			}
 		},
 		registerProcess(){
-			console.log("tes")
-			let formData = new FormData()
-			formData.append('user_photo', this.formUser.user_photo)
-			formData.append('user_name', this.formUser.user_name)
-			formData.append('user_birthdate', this.formUser.user_birthdate)
-			formData.append('email', this.formUser.email)
-			formData.append('password', this.formUser.password)
-			formData.append('user_role', this.formUser.user_role)
-			axios.post('https://0ff9-20-210-227-237.jp.ngrok.io/api/register',formData)
-			.then(()=> {
-				toastr.success('Anda Berhasil Register')
-			}).catch(error=>{
-				toastr.error('Register anda Gagal')
-				
-			})
+			if(this.formUser.user_name == ""){
+				toastr.error('Please fill in your name!')
+			}else if(this.formUser.user_birthdate == ""){
+				toastr.error('Please fill in your birthdate!')
+			}else if(this.formUser.email == ""){
+				toastr.error('Please fill in your email!')
+			}else if(this.formUser.password == ""){
+				toastr.error('Please fill in your password!')
+			}else if(this.password != this.ConfirmPassword){
+				toastr.error('Password does not match!')
+			}else if(this.formUser.user_photo == null){
+				toastr.error('Please fill in your photo!')
+			}else {
+				let formData = new FormData()
+				formData.append('user_photo', this.formUser.user_photo)
+				formData.append('user_name', this.formUser.user_name)
+				formData.append('user_birthdate', this.formUser.user_birthdate)
+				formData.append('email', this.formUser.email)
+				formData.append('password', this.formUser.password)
+				formData.append('user_role', this.formUser.user_role)
+				axios.post('https://sitohhang.com/caudex_backend/public/api/register',formData)
+				.then(()=> {
+					toastr.success('You have successfully registered, please check your inbox for verification!')
+					router.push('/login')
+				}).catch(error=>{
+					toastr.error('Registration failed!')
+					
+				})
+			}
 		},
 		
 		

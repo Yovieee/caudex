@@ -35,17 +35,23 @@
 							class="ml-auto"
 							v-on="on"
 							style="cursor: pointer"
-						></v-avatar>
+						>
+							<img
+								:src="
+									'https://sitohhang.com/caudex_backend/public/images/' +
+									currentUser.user_photo
+								"
+						/></v-avatar>
 					</template>
 					<v-list>
 						<div class="text-center">
 							<div class="mt-2">{{ currentUser.user_name }}</div>
-							<v-chip class="mt-2" color="orange lighten-4">{{
-								currentUser.user_membership
-							}}</v-chip>
+							<v-chip class="mt-2" color="orange lighten-4"
+								>Customer</v-chip
+							>
 						</div>
 						<hr />
-						<v-list-item @click="settingsDialog = true">
+						<v-list-item @click="settingsOpen">
 							<v-list-item-icon>
 								<v-icon>mdi-cog</v-icon>
 							</v-list-item-icon>
@@ -53,7 +59,7 @@
 								<v-list-item-title>Settings</v-list-item-title>
 							</v-list-item-content>
 						</v-list-item>
-						<v-list-item link>
+						<v-list-item @click="logoutProcess">
 							<v-list-item-icon>
 								<v-icon>mdi-logout</v-icon>
 							</v-list-item-icon>
@@ -77,11 +83,6 @@
 					</v-btn>
 					<v-toolbar-title>Settings</v-toolbar-title>
 					<v-spacer></v-spacer>
-					<v-toolbar-items>
-						<v-btn dark text @click="settingsDialog = false">
-							Save
-						</v-btn>
-					</v-toolbar-items>
 				</v-toolbar>
 				<div class="ma-12">
 					<v-form>
@@ -93,12 +94,8 @@
 						<v-row>
 							<v-col cols="12" sm="6" md="4">
 								<v-file-input
-									:v-model="
-										typeof formCurrentUser.user_photo ==
-										'string'
-											? null
-											: formCurrentUser.user_photo
-									"
+									v-if="this.settingsDialog"
+									v-model="formCurrentUser.user_photo"
 									style="display: none"
 									id="currentUserPhoto"
 									accept="image/*"
@@ -106,7 +103,10 @@
 								></v-file-input>
 								<div class="text-center">
 									<img
-										:src="formCurrentUser.user_photo"
+										:src="
+											'https://sitohhang.com/caudex_backend/public/images/' +
+											currentUser.user_photo
+										"
 										@click="
 											document
 												.querySelector(
@@ -132,12 +132,14 @@
 									v-model="formCurrentUser.user_name"
 									label="Name"
 									prepend-icon="mdi-account"
+									disabled
 								>
 								</v-text-field>
 								<v-text-field
-									v-model="formCurrentUser.user_email"
+									v-model="formCurrentUser.email"
 									label="Email"
 									prepend-icon="mdi-email"
+									disabled
 								>
 								</v-text-field>
 								<v-menu
@@ -158,6 +160,7 @@
 											readonly
 											v-bind="attrs"
 											v-on="on"
+											disabled
 										></v-text-field>
 									</template>
 									<v-date-picker
@@ -167,25 +170,16 @@
 										"
 									></v-date-picker>
 								</v-menu>
-								<v-select
-									v-model="formCurrentUser.user_role"
-									:items="[
-										{ text: 'Customer', value: 0 },
-										{ text: 'Admin', value: 1 },
-									]"
-									label="Role"
-									prepend-icon="mdi-key"
-								>
-								</v-select>
 								<v-btn
 									class="ma-2"
 									v-if="!currentUserChangePassword"
-									@click="currentUserChangePassword = true"
+									@click="currentUserChangePassword = true
+									formCurrentUser.password = ''"
 									>Change Password</v-btn
 								>
 								<v-text-field
 									v-if="currentUserChangePassword"
-									v-model="formCurrentUser.user_password"
+									v-model="formCurrentUser.password"
 									label="Password"
 									prepend-icon="mdi-lock"
 									:type="
@@ -209,8 +203,15 @@
 						<v-row>
 							<v-col>
 								<div class="text-right">
-									<v-btn color="primary">Save</v-btn>
-									<v-btn color="error" class="ml-4"
+									<v-btn
+										color="primary"
+										@click="changeSettingsProcess"
+										>Save</v-btn
+									>
+									<v-btn
+										color="error"
+										class="ml-4"
+										@click="settingsDialog = false"
 										>Cancel</v-btn
 									>
 								</div>
@@ -224,35 +225,31 @@
 </template>
 
 <script>
+import axios from "axios";
+import router from "@/router";
+import toastr from "toastr";
 export default {
 	data() {
 		return {
+			window,
+			formCurrentUser: {
+				id: "",
+				user_photo: null,
+				user_name: "",
+				user_birthdate: "",
+				user_email: "",
+				user_verification: NaN,
+			},
+			document,
 			settingsDialog: false,
 			currentUserDialog: false,
 			currentUserChangePassword: false,
 			currentUserShowPassword: false,
 			currentUserBirthdatePicker: false,
-			formCurrentUser: {
-				id: 1,
-				user_photo: (new Image().src =
-					"https://cdn.vuetifyjs.com/images/lists/1.jpg"),
-				user_name: "John Doe",
-				user_birthdate: "2022-01-21",
-				user_email: "stillman@gmail.com",
-				user_role: 0,
-				user_verification: 1,
-			},
-			currentUser: {
-				id: 1,
-				user_photo: (new Image().src =
-					"https://cdn.vuetifyjs.com/images/lists/1.jpg"),
-				user_name: "John Doe",
-				user_birthdate: "2022-01-21",
-				user_email: "stillman@gmail.com",
-				user_role: 0,
-				user_verification: 1,
-				user_membership: "Premium",
-			},
+			currentUser: JSON.parse(
+				window.atob(router.currentRoute.params.user)
+			),
+			access_token: router.currentRoute.params.access_token,
 		};
 	},
 	methods: {
@@ -262,6 +259,87 @@ export default {
 				document.querySelector("#currentUserPhotoPreview").src =
 					URL.createObjectURL(file);
 			}
+		},
+		settingsOpen() {
+			this.formCurrentUser.id = this.currentUser.id;
+			this.formCurrentUser.user_photo = null;
+			this.formCurrentUser.user_name = this.currentUser.user_name;
+			this.formCurrentUser.user_birthdate = this.currentUser.user_birthdate;
+			this.formCurrentUser.email = this.currentUser.email;
+			this.formCurrentUser.user_verification = this.currentUser.user_verification;
+			this.formCurrentUser.password = "undefined"
+			this.settingsDialog = true;
+		},
+		changeSettingsProcess() {
+			if (this.formCurrentUser.user_name == "") {
+				toastr.error("Please fill in your name!");
+			} else if (this.formCurrentUser.user_birthdate == "") {
+				toastr.error("Please fill in your birthdate!");
+			} else if (this.formCurrentUser.email == "") {
+				toastr.error("Please fill in your email!");
+			} else if (this.formCurrentUser.password == "") {
+				toastr.error("Please fill in your password!");
+			} else {
+				let formData = new FormData();
+				formData.append("id", this.formCurrentUser.id);
+				formData.append("user_photo", this.formCurrentUser.user_photo);
+				formData.append("user_name", this.formCurrentUser.user_name);
+				formData.append(
+					"user_birthdate",
+					this.formCurrentUser.user_birthdate
+				);
+				formData.append("email", this.formCurrentUser.email);
+				formData.append("password", this.formCurrentUser.password);
+				formData.append("user_role", this.formCurrentUser.user_role);
+				axios
+					.post(
+						"https://sitohhang.com/caudex_backend/public/api/users",
+						formData,
+						{
+							headers: {
+								Authorization: "Bearer " + this.access_token,
+							},
+						}
+					)
+					.then((response) => {
+						toastr.success("Account updated!");
+						this.currentUser = response.data.data;
+						router.push(
+							"/Customer/" +
+								window.btoa(
+									JSON.stringify(response.data.data)
+								) +
+								"/" +
+								this.access_token +
+								"/HomePage/"
+						)
+						this.currentUserChangePassword = false
+						this.settingsDialog = false
+					})
+					.catch(() => {
+						toastr.error("Update failed!")
+						this.settingsDialog = false
+					});
+			}
+		},
+		logoutProcess() {
+			axios
+				.post(
+					"https://sitohhang.com/caudex_backend/public/api/logout",
+					this.currentUser,
+					{
+						headers: {
+							Authorization: "Bearer " + this.access_token,
+						},
+					}
+				)
+				.then(() => {
+					toastr.success("Logout successful!");
+					router.push('/');
+				})
+				.catch(() => {
+					toastr.error("Logout failed!");
+				});
 		},
 	},
 };

@@ -20,19 +20,19 @@ const routes = [
 		component: () => import("../components/LoginPage.vue"),
 	},
 	{
-		path: "/Admin",
+		path: "/Admin/:user/:access_token",
 		name: "admin",
 		component: () => import("../components/Admin/AdminLayout.vue"),
 		children: [
 			{
-				path: "/Admin/Dashboard",
+				path: "/Admin/:user/:access_token/Dashboard",
 				name: "dashboard",
 				meta: { title: "Dashboard" },
 				component: () =>
 					import("../components/Admin/AdminDashboardComponent.vue"),
 			},
 			{
-				path: "/Admin/Users",
+				path: "/Admin/:user/:access_token/Users",
 				name: "users",
 				meta: { title: "Users" },
 				component: () =>
@@ -41,7 +41,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Users/Create",
+				path: "/Admin/:user/:access_token/Users/Create",
 				name: "create users",
 				meta: { title: "Create Users" },
 				component: () =>
@@ -50,7 +50,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Users/Show/:user",
+				path: "/Admin/:user/:access_token/Users/Show/:selectedUser",
 				name: "show users",
 				meta: { title: "Show Users" },
 				component: () =>
@@ -59,7 +59,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Users/Update/:user",
+				path: "/Admin/:user/:access_token/Users/Update/:selectedUser",
 				name: "update users",
 				meta: { title: "Update Users" },
 				component: () =>
@@ -68,7 +68,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Books",
+				path: "/Admin/:user/:access_token/Books",
 				name: "books",
 				meta: { title: "Books" },
 				component: () =>
@@ -77,7 +77,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Books/Create",
+				path: "/Admin/:user/:access_token/Books/Create",
 				name: "create books",
 				meta: { title: "Create Books" },
 				component: () =>
@@ -86,7 +86,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Books/Show/:book",
+				path: "/Admin/:user/:access_token/Books/Show/:book",
 				name: "show books",
 				meta: { title: "Show books" },
 				component: () =>
@@ -95,7 +95,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Books/Update/:book",
+				path: "/Admin/:user/:access_token/Books/Update/:book",
 				name: "update books",
 				meta: { title: "Update Books" },
 				component: () =>
@@ -104,7 +104,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Subscriptions",
+				path: "/Admin/:user/:access_token/Subscriptions",
 				name: "subscriptions",
 				meta: { title: "Subscriptions" },
 				component: () =>
@@ -113,7 +113,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Subscriptions/Create",
+				path: "/Admin/:user/:access_token/Subscriptions/Create",
 				name: "create subscription",
 				meta: { title: "Create Subscription" },
 				component: () =>
@@ -122,7 +122,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Subscriptions/Show/:subscription",
+				path: "/Admin/:user/:access_token/Subscriptions/Show/:subscription",
 				name: "show subscriptions",
 				meta: { title: "Show Subscriptions" },
 				component: () =>
@@ -131,7 +131,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Subscriptions/Update/:subscription",
+				path: "/Admin/:user/:access_token/Subscriptions/Update/:subscription",
 				name: "update subscriptions",
 				meta: { title: "Update Subscriptions" },
 				component: () =>
@@ -140,7 +140,7 @@ const routes = [
 					),
 			},
 			{
-				path: "/Admin/Analytics",
+				path: "/Admin/:user/:access_token/Analytics",
 				name: "analytics",
 				meta: { title: "Analytics" },
 				component: () =>
@@ -151,17 +151,17 @@ const routes = [
 		],
 	},
 	{
-		path: "/Customer",
+		path: "/Customer/:user/:access_token",
 		name: "Customer",
 		component: () => import("../components/Customer/Component.vue"),
 		children: [
 			{
-				path: "/Customer/HomePage",
+				path: "/Customer/:user/:access_token/HomePage/",
 				name: "HomePage",
 				component: () => import("../components/Customer/HomePage.vue"),
 			},
 			{
-				path: "/Customer/DetailProduct",
+				path: "/Customer/:user/:access_token/DetailProduct/:book",
 				name: "DetailProduct",
 				component: () =>
 					import("../components/Customer/DetailProduct.vue"),

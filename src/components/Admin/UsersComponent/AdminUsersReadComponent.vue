@@ -5,54 +5,40 @@
 				<h1 class="mb-6">Users</h1>
 			</v-col>
 			<v-col align="right">
-				<v-btn
-					class="ma-2"
-					color="primary"
-					link
-					tag="router-link"
-					to="/Admin/Users/Create"
-					><v-icon>mdi-plus</v-icon></v-btn
-				>
+				<v-btn class="ma-2" color="primary" link tag="router-link"
+					:to="'/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Users/Create'"><v-icon>mdi-plus</v-icon></v-btn>
 			</v-col>
 		</v-row>
-		<v-data-table :headers="headers" :items="users" @click:row="(item) => router.push('/Admin/Users/Show/' + window.btoa(JSON.stringify(item)))">
+		<v-data-table :headers="headers" :items="users"
+			@click:row="(item) => router.push('/Admin/' + window.btoa(JSON.stringify(router.currentRoute.params.user)) + '/' + router.currentRoute.params.access_token + '/Users/Show/' + window.btoa(JSON.stringify(item)))">
 			<template v-slot:item.user_birthdate="{ item }">
 				{{
-					new Date(item.user_birthdate).toLocaleString("en-US", {
-						day: "numeric",
-						month: "short",
-						year: "numeric",
-					})
+						new Date(item.user_birthdate).toLocaleString("en-US", {
+							day: "numeric",
+							month: "short",
+							year: "numeric",
+						})
 				}}
 			</template>
 			<template v-slot:item.user_role="{ item }">
-				{{ item.user_role == 0 ? "Customer" : "Admin" }}
+				{{ item.user_role }}
 			</template>
 			<template v-slot:item.user_verification="{ item }">
 				<v-icon>{{
-					item.user_verification == 0 ? "mdi-close" : "mdi-check"
+						item.email_verified_at == null ? "mdi-close" : "mdi-check"
 				}}</v-icon>
 			</template>
 			<template v-slot:item.user_photo="{ item }">
-				<v-img
-					:src="item.user_photo"
-					max-width="50"
-					max-height="50"
-				></v-img>
+				<v-img :src="'https://sitohhang.com/caudex_backend/public/images/' + item.user_photo" max-width="50" max-height="50"></v-img>
 			</template>
 			<template v-slot:item.user_actions="{ item }">
 				<v-icon small class="mr-2" @click.stop="openDeleteDialog(item)">
 					mdi-delete
 				</v-icon>
-				<v-icon
-					small
-					link
-					tag="router-link"
-					:to="
-						'/Admin/Users/Update/' +
-						window.btoa(JSON.stringify(item))
-					"
-				>
+				<v-icon small link tag="router-link" :to="
+					'/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Users/Update/' +
+					window.btoa(JSON.stringify(item))
+				">
 					mdi-pencil
 				</v-icon>
 			</template>
@@ -65,12 +51,7 @@
 				<v-container>
 					<v-row align="center">
 						<v-col cols="3">
-							<v-img
-								:src="deleteTarget.user_photo"
-								max-width="50"
-								max-height="50"
-								class="ml-4"
-							>
+							<v-img :src="deleteTarget.user_photo" max-width="50" max-height="50" class="ml-4">
 							</v-img>
 						</v-col>
 						<v-col>{{ deleteTarget.user_name }}</v-col>
@@ -79,11 +60,7 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 
-					<v-btn
-						color="green darken-1"
-						text
-						@click="closeDeleteDialog()"
-					>
+					<v-btn color="green darken-1" text @click="closeDeleteDialog()">
 						Cancel
 					</v-btn>
 
@@ -97,6 +74,9 @@
 </template>
 <script>
 import router from '@/router';
+import { ref, onMounted } from 'vue';
+import axios from 'axios'
+import toastr from 'toastr';
 export default {
 	name: "AdminUsersReadComponent",
 	data() {
@@ -106,58 +86,15 @@ export default {
 			JSON,
 			deleteDialog: false,
 			deleteTarget: {},
-			users: [],
 			headers: [
 				{ text: "ID", value: "id" },
 				{ text: "Photo", value: "user_photo" },
 				{ text: "Name", value: "user_name" },
 				{ text: "Birthdate", value: "user_birthdate" },
-				{ text: "Email", value: "user_email" },
+				{ text: "Email", value: "email" },
 				{ text: "Role", value: "user_role" },
 				{ text: "Verification", value: "user_verification" },
-				{ text: "Actions", value: "user_actions" },
-			],
-			users: [
-				{
-					id: 1,
-					user_photo: (new Image().src =
-						"https://cdn.vuetifyjs.com/images/lists/1.jpg"),
-					user_name: "John Doe",
-					user_birthdate: "2022-01-21",
-					user_email: "stillman@gmail.com",
-					user_role: 0,
-					user_verification: 1,
-				},
-				{
-					id: 2,
-					user_photo: (new Image().src =
-						"https://cdn.vuetifyjs.com/images/lists/2.jpg"),
-					user_name: "Jane Doe",
-					user_birthdate: "2022-01-21",
-					user_email: "Otniel@outlook.co.id",
-					user_role: 0,
-					user_verification: 0,
-				},
-				{
-					id: 3,
-					user_photo: (new Image().src =
-						"https://cdn.vuetifyjs.com/images/lists/3.jpg"),
-					user_name: "John Doe",
-					user_birthdate: "2022-01-21",
-					user_email: "rakai@michat.id",
-					user_role: 1,
-					user_verification: 1,
-				},
-				{
-					id: 4,
-					user_photo: (new Image().src =
-						"https://cdn.vuetifyjs.com/images/lists/4.jpg"),
-					user_name: "Jane Doe",
-					user_birthdate: "2022-01-21",
-					user_email: "yonas@google.com",
-					user_role: 1,
-					user_verification: 0,
-				},
+				{ text: "Actions", value: "user_actions" }
 			],
 		};
 	},
@@ -171,9 +108,52 @@ export default {
 			this.deleteTarget = {};
 		},
 		deleteProcess() {
+			axios.delete('https://sitohhang.com/caudex_backend/public/api/users/' + this.deleteTarget.id,
+				{
+					headers: {
+						Authorization: "Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then(()=>{
+					axios.get('https://sitohhang.com/caudex_backend/public/api/users',
+					{
+						headers: {
+							Authorization: "Bearer " + router.currentRoute.params.access_token,
+						},
+					})
+					.then(response => {
+						this.users = response.data.data;
+						toastr.success('User deleted successfully');
+					})
+					.catch(error => {
+						toastr.error('User deletion failed');
+					});
+				})
+				.catch(error => {
+					toastr.error('User deletion failed');
+				});
 			this.closeDeleteDialog();
-			//to do delete process
 		},
 	},
+	setup() {
+		let users = ref([]);
+		onMounted(() => {
+			axios.get('https://sitohhang.com/caudex_backend/public/api/users',
+				{
+					headers: {
+						Authorization: "Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then(response => {
+					users.value = response.data.data;
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		});
+		return {
+			users,
+		};
+	}
 };
 </script>

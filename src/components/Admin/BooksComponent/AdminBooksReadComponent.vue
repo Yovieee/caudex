@@ -10,15 +10,15 @@
 					color="primary"
 					link
 					tag="router-link"
-					to="/Admin/Books/Create"
+					:to="'/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Books/Create'"
 					><v-icon>mdi-plus</v-icon></v-btn
 				>
 			</v-col>
 		</v-row>
-		<v-data-table :headers="headers" :items="books" @click:row="(item) => router.push('/Admin/Books/Show/' + window.btoa(JSON.stringify(item)))">
+		<v-data-table :headers="headers" :items="books" @click:row="(item) => router.push('/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Books/Show/' + window.btoa(JSON.stringify(item)))">
 			<template v-slot:item.book_cover="{ item }">
 				<v-img
-					:src="item.book_cover"
+					:src="'https://sitohhang.com/caudex_backend/public/images/' + item.book_cover"
 					max-width="50"
 					max-height="50"
 				></v-img>
@@ -27,7 +27,7 @@
 				<v-icon small class="mr-2" @click.stop="openDeleteDialog(item)"> mdi-delete </v-icon>
 				<v-icon small link
 					tag="router-link"
-					:to="'/Admin/Books/Update/' + window.btoa(JSON.stringify(item))"> mdi-pencil </v-icon>
+					:to="'/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Users/Update/' + window.btoa(JSON.stringify(item))"> mdi-pencil </v-icon>
 			</template>
 		</v-data-table>
 		<v-dialog v-model="deleteDialog" max-width="320" persistent>
@@ -66,6 +66,9 @@
 </template>
 <script>
 import router from '@/router';
+import axios from 'axios';
+import toastr from 'toastr';
+import { ref, onMounted } from 'vue'
 export default {
 	name: "AdminBooksReadComponent",
 	data() {
@@ -75,7 +78,6 @@ export default {
 			JSON,
             deleteDialog: false,
             deleteTarget: {},
-			books: [],
 			headers: [
 				{ text: "ID", value: "id" },
 				{ text: "Cover", value: "book_cover" },
@@ -85,92 +87,6 @@ export default {
 				{ text: "Author", value: "author_name" },
 				{ text: "Category", value: "category_name" },
 				{ text: "Actions", value: "book_actions" },
-			],
-			books: [
-				{
-					id: 1,
-					book_cover: "https://picsum.photos/200/300",
-					book_title: "Book 1",
-					book_year: "2020",
-					publisher_name: "Publisher 1",
-					author_name: "Author 1",
-					category_name: "Category 1",
-					book_publisher: 1,
-					book_author: [1, 2, 3],
-					book_category: [1, 2],
-				},
-				{
-					id: 2,
-					book_cover: "https://picsum.photos/200/300",
-					book_title: "Book 2",
-					book_year: "2020",
-					publisher_name: "Publisher 2",
-					author_name: "Author 2",
-					category_name: "Category 2",
-					book_publisher: 1,
-					book_author: [1, 2, 3],
-					book_category: [1, 2],
-				},
-				{
-					id: 3,
-					book_cover: "https://picsum.photos/200/300",
-					book_title: "Book 3",
-					book_year: "2020",
-					publisher_name: "Publisher 3",
-					author_name: "Author 3",
-					category_name: "Category 3",
-					book_publisher: 1,
-					book_author: [1, 2, 3],
-					book_category: [1, 2],
-				},
-				{
-					id: 4,
-					book_cover: "https://picsum.photos/200/300",
-					book_title: "Book 4",
-					book_year: "2020",
-					publisher_name: "Publisher 4",
-					author_name: "Author 4",
-					category_name: "Category 4",
-					book_publisher: 1,
-					book_author: [1, 2, 3],
-					book_category: [1, 2],
-				},
-				{
-					id: 5,
-					book_cover: "https://picsum.photos/200/300",
-					book_title: "Book 5",
-					book_year: "2020",
-					publisher_name: "Publisher 5",
-					author_name: "Author 5",
-					category_name: "Category 5",
-					book_publisher: 1,
-					book_author: [1, 2, 3],
-					book_category: [1, 2],
-				},
-				{
-					id: 6,
-					book_cover: "https://picsum.photos/200/300",
-					book_title: "Book 6",
-					book_year: "2020",
-					publisher_name: "Publisher 6",
-					author_name: "Author 6",
-					category_name: "Category 6",
-					book_publisher: 1,
-					book_author: [1, 2, 3],
-					book_category: [1, 2],
-				},
-				{
-					id: 7,
-					book_cover: "https://picsum.photos/200/300",
-					book_title: "Book 7",
-					book_year: "2020",
-					publisher_name: "Publisher 7",
-					author_name: "Author 7",
-					category_name: "Category 7",
-					book_publisher: 1,
-					book_author: [1, 2, 3],
-					book_category: [1, 2],
-				}
 			],
 		}
 	},
@@ -184,9 +100,49 @@ export default {
             this.deleteTarget = {}
         },
         deleteProcess() {
-            this.closeDeleteDialog()
-            //to do delete process
+            axios
+				.delete("https://sitohhang.com/caudex_backend/public/api/books/" + this.deleteTarget.id, {
+					headers: {
+						Authorization:
+							"Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then((response) => {
+					this.closeDeleteDialog()
+					axios
+						.get("https://sitohhang.com/caudex_backend/public/api/books", {
+							headers: {
+								Authorization:
+									"Bearer " + router.currentRoute.params.access_token,
+							},
+						})
+						.then((response) => {
+							this.books = response.data.data
+							toastr.success("Book deleted successfully");
+						}).catch((error) => {
+							toastr.error("Something went wrong");
+						});
+				});
+
         }
     },
+	setup() {
+		let books = ref([])
+		onMounted(() => {
+			axios
+				.get("https://sitohhang.com/caudex_backend/public/api/books", {
+					headers: {
+						Authorization:
+							"Bearer " + router.currentRoute.params.access_token,
+					},
+				})
+				.then((response) => {
+					books.value = response.data.data
+				});
+		});
+		return {
+			books
+		};
+	},
 };
 </script>

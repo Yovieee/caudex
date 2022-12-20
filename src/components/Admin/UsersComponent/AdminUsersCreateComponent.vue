@@ -42,7 +42,7 @@
 					>
 					</v-text-field>
 					<v-text-field
-						v-model="formUser.user_email"
+						v-model="formUser.email"
 						label="Email"
 						prepend-icon="mdi-email"
 					>
@@ -72,10 +72,7 @@
 					</v-menu>
 					<v-select
 						v-model="formUser.user_role"
-						:items="[
-							{ text: 'Customer', value: 0 },
-							{ text: 'Admin', value: 1 },
-						]"
+						:items="[ 'Customer','Admin' ]"
 						label="Role"
 						prepend-icon="mdi-key"
 					>
@@ -94,7 +91,7 @@
 			<v-row>
 				<v-col>
 					<div class="text-right">
-						<v-btn color="primary">Save</v-btn>
+						<v-btn color="primary" @click="createUserProcess">Save</v-btn>
 						<v-btn color="error" class="ml-4" @click="window.history.back()">Cancel</v-btn>
 					</div>
 				</v-col>
@@ -103,6 +100,9 @@
 	</div>
 </template>
 <script>
+import axios from 'axios'
+import router from '@/router'
+import toastr from 'toastr';
 export default {
 	name: "AdminUsersCreateComponent",
 	data: () => ({
@@ -127,6 +127,37 @@ export default {
 					URL.createObjectURL(file);
 			}
 		},
+		createUserProcess() {
+			if(this.formUser.user_name == ""){
+				toastr.error('Please fill in the name!')
+			}else if(this.formUser.user_birthdate == ""){
+				toastr.error('Please fill in the birthdate!')
+			}else if(this.formUser.email == ""){
+				toastr.error('Please fill in the email!')
+			}else if(this.formUser.password == ""){
+				toastr.error('Please fill in the password!')
+			}else if(this.formUser.user_photo == null){
+				toastr.error('Please fill in the photo!')
+			}else if(this.formUser.user_role == ""){
+				toastr.error('Please fill in the role!')
+			}else {
+				let formData = new FormData()
+				formData.append('user_photo', this.formUser.user_photo)
+				formData.append('user_name', this.formUser.user_name)
+				formData.append('user_birthdate', this.formUser.user_birthdate)
+				formData.append('email', this.formUser.email)
+				formData.append('password', this.formUser.password)
+				formData.append('user_role', this.formUser.user_role)
+				axios.post('https://sitohhang.com/caudex_backend/public/api/register',formData)
+				.then(()=> {
+					toastr.success('You have successfully registered, please check your inbox for verification!')
+					router.push('/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Users/')
+				}).catch(error=>{
+					toastr.error('Registration failed!')
+					
+				})
+			}
+		}
 	},
 };
 </script>

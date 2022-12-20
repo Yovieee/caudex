@@ -9,7 +9,7 @@
 			<v-row>
 				<v-col cols="12" sm="6" md="4">
 					<v-file-input
-						:v-model="typeof(formBook.book_cover) == 'string' ? null : formBook.book_cover"
+						v-model="formBook.book_cover"
 						style="display: none"
 						id="imageInput"
 						accept="image/*"
@@ -17,7 +17,7 @@
 					></v-file-input>
 					<div class="text-center">
 						<img
-							:src="formBook.book_cover"
+						:src="'https://sitohhang.com/caudex_backend/public/images/' + JSON.parse(window.atob(router.currentRoute.params.book)).book_cover"
 							@click="
 								document.querySelector('#imageInput').click()
 							"
@@ -71,7 +71,6 @@
 								:items="authors"
 								label="Author"
 								prepend-icon="mdi-account-supervisor"
-								multiple
 							>
 							</v-autocomplete>
 						</v-col>
@@ -88,7 +87,6 @@
 								:items="categories"
 								label="Category"
 								prepend-icon="mdi-tag"
-								multiple
 							>
 							</v-autocomplete>
 						</v-col>
@@ -111,7 +109,7 @@
 			<v-row>
 				<v-col>
 					<div class="text-right">
-						<v-btn color="primary" type="submit">Save</v-btn>
+						<v-btn color="primary" @click="updateBookProcess">Save</v-btn>
 						<v-btn color="error" class="ml-4" @click="window.history.back()">Cancel</v-btn>
 					</div>
 				</v-col>
@@ -233,7 +231,9 @@
 </template>
 <script>
 import router from '@/router';
-
+import { ref, onMounted } from 'vue'
+import axios from 'axios';
+import toastr from 'toastr';
 export default {
 	name: "AdminBooksUpdateComponent",
 	data: () => ({
@@ -243,11 +243,19 @@ export default {
 		changeFile: false,
 		document,
 		window,
+		JSON,
+		router,
 		birthdatePicker: false,
-		publishers: [{text: "Publisher 1", value: 1}, {text: "Publisher 2", value: 2}, {text: "Publisher 3", value: 3}],
-		authors: [{text: "Author 1", value: 1}, {text: "Author 2", value: 2}, {text: "Author 3", value: 3}],
-		categories: [{text: "Category 1", value: 1}, {text: "Category 2", value: 2}, {text: "Category 3", value: 3}],
-		formBook: JSON.parse(window.atob(router.currentRoute.params.book)),
+		formBook: {
+			id: JSON.parse(window.atob(router.currentRoute.params.book)).id,
+			book_title: JSON.parse(window.atob(router.currentRoute.params.book)).book_title,
+			book_year: JSON.parse(window.atob(router.currentRoute.params.book)).book_year,
+			book_publisher: JSON.parse(window.atob(router.currentRoute.params.book)).book_publisher,
+			book_author: JSON.parse(window.atob(router.currentRoute.params.book)).book_author,
+			book_category: JSON.parse(window.atob(router.currentRoute.params.book)).book_category,
+			book_cover: null,
+			book_file: null
+		},
 		formPublisher: {
 			publisher_name: null,
 			publisher_country: null,
@@ -267,6 +275,70 @@ export default {
 					URL.createObjectURL(file);
 			}
 		},
+		updateBookProcess() {
+			let formData = new FormData();
+			formData.append("id", this.formBook.id)
+			formData.append("book_title", this.formBook.book_title)
+			formData.append("book_year", this.formBook.book_year)
+			formData.append("book_publisher", this.formBook.book_publisher)
+			formData.append("book_author", this.formBook.book_author)
+			formData.append("book_category", this.formBook.book_category)
+			formData.append("book_file", this.formBook.book_file)
+			formData.append("book_cover", this.formBook.book_cover)
+			axios.post('https://sitohhang.com/caudex_backend/public/api/books', formData, {
+				headers: {
+					Authorization:
+						"Bearer " + router.currentRoute.params.access_token,
+				},
+			}).then((response) => {
+				toastr.success("Book updated successfully!");
+				router.push('/Admin/' + router.currentRoute.params.user + '/' + router.currentRoute.params.access_token + '/Books');
+			}).catch((error) => {
+				toastr.error("Something went wrong");
+			})
+		}
 	},
+	setup() {
+		let publishers = ref([]);
+		let authors = ref([]);
+		let categories = ref([]);
+		onMounted(() => {
+			axios.get('https://sitohhang.com/caudex_backend/public/api/publishers', {
+				headers: {
+					Authorization:
+						"Bearer " + router.currentRoute.params.access_token,
+				},
+			}).then((response) => {
+				publishers.value = response.data.data;
+			}).catch((error) => {
+				toastr.error("Something went wrong");
+			})
+			axios.get('https://sitohhang.com/caudex_backend/public/api/authors', {
+				headers: {
+					Authorization:
+						"Bearer " + router.currentRoute.params.access_token,
+				},
+			}).then((response) => {
+				authors.value = response.data.data;
+			}).catch((error) => {
+				toastr.error("Something went wrong");
+			})
+			axios.get('https://sitohhang.com/caudex_backend/public/api/categories', {
+				headers: {
+					Authorization:
+						"Bearer " + router.currentRoute.params.access_token,
+				},
+			}).then((response) => {
+				categories.value = response.data.data;
+			}).catch((error) => {
+				toastr.error("Something went wrong");
+			})
+		})
+		return {
+			publishers,
+			authors,
+			categories,
+		};
+	}
 };
 </script>
